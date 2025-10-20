@@ -1,0 +1,1666 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>فروشگاه آنلاین الماس شرق</title>
+  <script src="/_sdk/data_sdk.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Vazir', 'Tahoma', sans-serif;
+        }
+        
+        .product-card {
+            transition: all 0.3s ease;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+        
+        .admin-panel {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(238, 90, 36, 0.4);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(9, 132, 227, 0.4);
+        }
+        
+        .category-btn {
+            transition: all 0.3s ease;
+            border-radius: 25px;
+        }
+        
+        .category-btn.active {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            transform: scale(1.05);
+        }
+        
+        .loading-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #ff6b6b;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .modal {
+            backdrop-filter: blur(15px);
+        }
+        
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            padding: 16px 24px;
+            border-radius: 12px;
+            color: white;
+            font-weight: bold;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast.success {
+            background: linear-gradient(135deg, #00b894, #00a085);
+        }
+        
+        .toast.error {
+            background: linear-gradient(135deg, #e17055, #d63031);
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 400px;
+        }
+        
+        .image-gallery {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 10px 0;
+        }
+        
+        .image-gallery img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .image-gallery img.active {
+            border-color: #ff6b6b;
+            transform: scale(1.1);
+        }
+        
+        .color-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .color-option.active {
+            border-color: #333;
+            transform: scale(1.2);
+        }
+        
+        .size-option {
+            padding: 8px 16px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .size-option.active {
+            border-color: #ff6b6b;
+            background: #ff6b6b;
+            color: white;
+        }
+        
+        .cart-item {
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .search-container {
+            position: relative;
+        }
+        
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 100;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .search-result-item {
+            padding: 12px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+            transition: background 0.2s ease;
+        }
+        
+        .search-result-item:hover {
+            background: #f8f9fa;
+        }
+        
+        .user-menu {
+            position: relative;
+        }
+        
+        .user-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            min-width: 200px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff6b6b;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .product-slider {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding: 20px 0;
+            scroll-behavior: smooth;
+        }
+        
+        .product-slider::-webkit-scrollbar {
+            height: 8px;
+        }
+        
+        .product-slider::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        .product-slider::-webkit-scrollbar-thumb {
+            background: #ff6b6b;
+            border-radius: 10px;
+        }
+        
+        .floating-cart {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+        
+        .reviews-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .star-rating {
+            color: #ffc107;
+        }
+        
+        .related-products {
+            margin-top: 40px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+    </style>
+  <style>@view-transition { navigation: auto; }</style>
+ </head>
+ <body class="bg-gray-50"><!-- Header -->
+  <header class="bg-white shadow-lg sticky top-0 z-50">
+   <div class="container mx-auto px-4 py-4">
+    <div class="flex justify-between items-center">
+     <div class="flex items-center space-x-4 space-x-reverse">
+      <div class="flex items-center space-x-2 space-x-reverse">
+       <div class="w-10 h-10 bg-gradient-to-br from-orange-400 to-red-500 rounded-full flex items-center justify-center"><i class="fas fa-gem text-white"></i>
+       </div>
+       <div>
+        <h1 id="store-title" class="text-2xl font-bold text-gray-800">الماس شرق</h1>
+        <p id="store-tagline" class="text-sm text-gray-600">بهترین کیفیت، بهترین قیمت</p>
+       </div>
+      </div>
+     </div><!-- Search Bar -->
+     <div class="search-container flex-1 max-w-md mx-8">
+      <div class="relative"><input type="text" id="search-input" placeholder="جستجوی محصولات..." class="w-full px-4 py-2 pr-10 border border-gray-300 rounded-full focus:ring-2 focus:ring-orange-500 focus:border-transparent"> <i class="fas fa-search absolute right-3 top-3 text-gray-400"></i>
+      </div>
+      <div id="search-results" class="search-results hidden"></div>
+     </div>
+     <div class="flex items-center space-x-4 space-x-reverse"><!-- User Account -->
+      <div class="user-menu"><button id="user-btn" class="flex items-center space-x-2 space-x-reverse text-gray-700 hover:text-orange-600 transition-colors"> <i class="fas fa-user"></i> <span id="user-status">ورود / ثبت نام</span> </button>
+       <div id="user-dropdown" class="user-dropdown hidden">
+        <div id="login-section" class="p-4"><button id="login-btn" class="w-full btn-secondary text-white py-2 rounded-lg font-bold mb-2"> ورود به حساب </button> <button id="register-btn" class="w-full border border-blue-500 text-blue-500 py-2 rounded-lg font-bold"> ثبت نام </button>
+        </div>
+        <div id="user-section" class="p-4 hidden">
+         <div class="border-b pb-2 mb-2">
+          <p class="font-bold" id="user-name">کاربر عزیز</p>
+          <p class="text-sm text-gray-600" id="user-email">user@example.com</p>
+         </div><button id="logout-btn" class="w-full text-red-500 py-2 rounded-lg font-bold hover:bg-red-50"> خروج از حساب </button>
+        </div>
+       </div>
+      </div><!-- Shopping Cart --> <button id="cart-btn" class="relative text-gray-700 hover:text-orange-600 transition-colors"> <i class="fas fa-shopping-cart text-xl"></i> <span id="cart-count" class="notification-badge hidden">0</span> </button> <!-- Admin Panel --> <button id="admin-btn" class="btn-primary text-white px-6 py-2 rounded-lg font-bold"> <i class="fas fa-cog ml-2"></i> پنل مدیریت </button>
+     </div>
+    </div>
+   </div>
+  </header><!-- Hero Section -->
+  <section class="hero-section text-white">
+   <div class="container mx-auto px-4 py-16 text-center">
+    <h2 id="welcome-message" class="text-4xl font-bold mb-4">به فروشگاه الماس شرق خوش آمدید</h2>
+    <p class="text-xl mb-8 opacity-90">مجموعه‌ای از بهترین محصولات مد و زیبایی</p><button onclick="scrollToProducts()" class="btn-secondary text-white px-8 py-3 rounded-full font-bold text-lg"> <i class="fas fa-arrow-down ml-2"></i> مشاهده محصولات </button>
+   </div>
+  </section><!-- Main Content -->
+  <main class="container mx-auto px-4 py-8" id="products-section"><!-- Categories -->
+   <div class="mb-8">
+    <h2 class="text-2xl font-bold mb-6 text-gray-800 text-center">دسته‌بندی محصولات</h2>
+    <div class="flex flex-wrap justify-center gap-4"><button class="category-btn active px-8 py-3 rounded-full border-2 border-gray-300 font-bold" data-category="all"> <i class="fas fa-th-large ml-2"></i> همه محصولات </button> <button class="category-btn px-8 py-3 rounded-full border-2 border-gray-300 font-bold" data-category="لباس"> <i class="fas fa-tshirt ml-2"></i> لباس </button> <button class="category-btn px-8 py-3 rounded-full border-2 border-gray-300 font-bold" data-category="آرایش"> <i class="fas fa-palette ml-2"></i> لوازم آرایش </button> <button class="category-btn px-8 py-3 rounded-full border-2 border-gray-300 font-bold" data-category="مراقبت"> <i class="fas fa-spa ml-2"></i> مراقبت پوست </button> <button class="category-btn px-8 py-3 rounded-full border-2 border-gray-300 font-bold" data-category="عطر"> <i class="fas fa-spray-can ml-2"></i> عطر و ادکلن </button>
+    </div>
+   </div><!-- New Products Slider -->
+   <div class="mb-12">
+    <h3 class="text-xl font-bold mb-4 text-gray-800"><i class="fas fa-star text-yellow-500 ml-2"></i> جدیدترین محصولات</h3>
+    <div id="new-products-slider" class="product-slider"><!-- New products will be loaded here -->
+    </div>
+   </div><!-- Products Grid -->
+   <div id="products-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"><!-- Products will be loaded here -->
+   </div><!-- Empty State -->
+   <div id="empty-state" class="text-center py-20 hidden">
+    <div class="text-8xl mb-6">
+     🛍️
+    </div>
+    <h3 class="text-2xl font-bold text-gray-600 mb-4">هنوز محصولی اضافه نشده</h3>
+    <p class="text-gray-500 mb-6">از پنل مدیریت محصولات جدید اضافه کنید</p><button id="add-sample-products" class="btn-primary text-white px-8 py-3 rounded-lg font-bold"> افزودن محصولات نمونه </button>
+   </div>
+  </main><!-- Comments & Suggestions Section -->
+  <section class="bg-white py-12 mt-12">
+   <div class="container mx-auto px-4">
+    <div class="max-w-2xl mx-auto">
+     <h3 class="text-2xl font-bold text-center mb-8 text-gray-800"><i class="fas fa-comments text-blue-500 ml-2"></i> نظرات و پیشنهادات</h3>
+     <div class="bg-gray-50 p-6 rounded-xl">
+      <form id="feedback-form" class="space-y-4">
+       <div><label class="block text-sm font-bold text-gray-700 mb-2">نام شما</label> <input type="text" id="feedback-name" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="نام خود را وارد کنید" required>
+       </div>
+       <div><label class="block text-sm font-bold text-gray-700 mb-2">نظر یا پیشنهاد شما</label> <textarea id="feedback-message" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" rows="4" placeholder="نظر یا پیشنهاد خود را بنویسید..." required></textarea>
+       </div><button type="submit" id="feedback-btn" class="w-full btn-secondary text-white py-3 rounded-lg font-bold flex items-center justify-center"> <span class="loading-spinner hidden ml-2"></span> <i class="fas fa-paper-plane ml-2"></i> ارسال نظر </button>
+      </form>
+     </div>
+    </div>
+   </div>
+  </section><!-- Footer -->
+  <footer class="bg-gray-800 text-white py-12 mt-12">
+   <div class="container mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+     <div>
+      <h4 class="text-lg font-bold mb-4"><i class="fas fa-gem text-orange-500 ml-2"></i> الماس شرق</h4>
+      <p class="text-gray-300 mb-4">فروشگاه آنلاین مد و زیبایی با بهترین کیفیت و قیمت</p>
+     </div>
+     <div>
+      <h4 class="text-lg font-bold mb-4"><i class="fas fa-phone text-green-500 ml-2"></i> راه‌های ارتباطی</h4>
+      <div class="space-y-2">
+       <p class="text-gray-300"><i class="fas fa-envelope ml-2"></i> <span id="footer-email">Enayatollaharashi@gmail.com</span></p>
+       <p class="text-gray-300"><i class="fab fa-instagram ml-2"></i> <span id="footer-instagram">@almas_Sharq.af</span></p>
+       <p class="text-gray-300"><i class="fab fa-telegram ml-2"></i> پشتیبانی: <a href="http://t.me/rahmatedit" target="_blank" rel="noopener noreferrer" id="footer-telegram" class="text-blue-400 hover:text-blue-300">@rahmatedit</a></p>
+      </div>
+     </div>
+     <div>
+      <h4 class="text-lg font-bold mb-4"><i class="fas fa-info-circle text-blue-500 ml-2"></i> درباره ما</h4>
+      <p class="text-gray-300">ما در الماس شرق با ارائه بهترین محصولات مد و زیبایی، سعی در رضایت مشتریان عزیز داریم.</p>
+     </div>
+    </div>
+    <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+     <p class="text-gray-400">© 2024 الماس شرق. تمامی حقوق محفوظ است.</p>
+    </div>
+   </div>
+  </footer><!-- Login Modal -->
+  <div id="login-modal" class="modal fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+   <div class="bg-white rounded-xl p-8 w-full max-w-md mx-4">
+    <div class="text-center mb-6">
+     <div class="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-user text-2xl text-white"></i>
+     </div>
+     <h2 class="text-2xl font-bold text-gray-800">ورود به حساب کاربری</h2>
+     <p class="text-gray-600 mt-2">لطفا اطلاعات خود را وارد کنید</p>
+    </div>
+    <form id="user-login-form" class="space-y-4">
+     <div><label class="block text-sm font-bold text-gray-700 mb-2">ایمیل</label> <input type="email" id="user-email-input" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="ایمیل خود را وارد کنید" required>
+     </div>
+     <div><label class="block text-sm font-bold text-gray-700 mb-2">رمز عبور</label> <input type="password" id="user-password-input" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="رمز عبور خود را وارد کنید" required>
+     </div>
+     <div id="user-login-error" class="text-red-600 text-sm hidden"></div><button type="submit" id="user-login-btn" class="w-full btn-secondary text-white py-3 rounded-lg font-bold flex items-center justify-center"> <span class="loading-spinner hidden ml-2"></span> ورود به حساب </button>
+    </form>
+    <div class="flex justify-center mt-4"><button id="close-user-login" class="text-gray-500 hover:text-gray-700 font-bold"> انصراف </button>
+    </div>
+   </div>
+  </div><!-- Admin Login Modal -->
+  <div id="admin-login-modal" class="modal fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+   <div class="bg-white rounded-xl p-8 w-full max-w-md mx-4">
+    <div class="text-center mb-6">
+     <div class="w-16 h-16 bg-gradient-to-br from-orange-400 to-red-500 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-lock text-2xl text-white"></i>
+     </div>
+     <h2 class="text-2xl font-bold text-gray-800">ورود به پنل مدیریت</h2>
+     <p class="text-gray-600 mt-2">لطفا اطلاعات مدیریت را وارد کنید</p>
+    </div>
+    <form id="admin-login-form" class="space-y-4">
+     <div><label class="block text-sm font-bold text-gray-700 mb-2">نام کاربری</label> <input type="text" id="admin-username" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="نام کاربری مدیر" required>
+     </div>
+     <div><label class="block text-sm font-bold text-gray-700 mb-2">رمز عبور</label> <input type="password" id="admin-password" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="رمز عبور مدیر" required>
+     </div>
+     <div id="admin-login-error" class="text-red-600 text-sm hidden"></div><button type="submit" id="admin-login-btn" class="w-full btn-primary text-white py-3 rounded-lg font-bold flex items-center justify-center"> <span class="loading-spinner hidden ml-2"></span> ورود به پنل </button>
+    </form>
+    <div class="mt-6 p-4 bg-orange-50 rounded-lg">
+     <p class="text-sm text-orange-800 font-bold">اطلاعات پیش‌فرض:</p>
+     <p class="text-sm text-orange-700">نام کاربری: </p>
+     <p class="text-sm text-orange-700">رمز عبور: </p>
+    </div>
+    <div class="flex justify-center mt-4"><button id="close-admin-login" class="text-gray-500 hover:text-gray-700 font-bold"> انصراف </button>
+    </div>
+   </div>
+  </div><!-- Admin Panel Modal -->
+  <div id="admin-modal" class="modal fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+   <div class="bg-white rounded-xl p-6 w-full max-w-6xl max-h-[90vh] overflow-y-auto mx-4">
+    <div class="admin-panel text-white p-6 rounded-lg mb-6">
+     <h2 class="text-3xl font-bold mb-2"><i class="fas fa-cogs ml-2"></i> پنل مدیریت فروشگاه</h2>
+     <p class="opacity-90">مدیریت کامل محصولات و تنظیمات فروشگاه</p>
+    </div><!-- Add Product Form -->
+    <div class="bg-gray-50 p-6 rounded-lg mb-6">
+     <h3 class="text-xl font-bold mb-6 text-gray-800"><i class="fas fa-plus-circle text-green-500 ml-2"></i> افزودن محصول جدید</h3>
+     <form id="add-product-form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div><label class="block text-sm font-bold text-gray-700 mb-2">نام محصول</label> <input type="text" id="product-name" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="نام محصول را وارد کنید" required>
+      </div>
+      <div><label class="block text-sm font-bold text-gray-700 mb-2">قیمت پایه (تومان)</label> <input type="number" id="product-price" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="قیمت پایه محصول" required>
+      </div>
+      <div><label class="block text-sm font-bold text-gray-700 mb-2">دسته‌بندی</label> <select id="product-category" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" required> <option value="">انتخاب دسته‌بندی</option> <option value="لباس">لباس</option> <option value="آرایش">لوازم آرایش</option> <option value="مراقبت">مراقبت پوست</option> <option value="عطر">عطر و ادکلن</option> </select>
+      </div>
+      <div><label class="block text-sm font-bold text-gray-700 mb-2">تصاویر محصول (لینک‌ها با کاما جدا شوند)</label> <input type="text" id="product-images" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="https://example.com/image1.jpg, https://example.com/image2.jpg">
+      </div>
+      <div><label class="block text-sm font-bold text-gray-700 mb-2">رنگ‌های موجود (با کاما جدا شوند)</label> <input type="text" id="product-colors" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="قرمز, آبی, سبز">
+      </div>
+      <div><label class="block text-sm font-bold text-gray-700 mb-2">سایزهای موجود (با کاما جدا شوند)</label> <input type="text" id="product-sizes" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="S, M, L, XL">
+      </div>
+      <div class="md:col-span-2"><label class="block text-sm font-bold text-gray-700 mb-2">قیمت‌های مختلف برای رنگ‌ها (فرمت: رنگ:قیمت با کاما جدا شوند)</label> <input type="text" id="product-color-prices" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="قرمز:150000, آبی:160000, سبز:155000">
+      </div>
+      <div class="md:col-span-2"><label class="block text-sm font-bold text-gray-700 mb-2">توضیحات محصول</label> <textarea id="product-description" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" rows="3" placeholder="توضیحات کامل محصول را وارد کنید"></textarea>
+      </div>
+      <div class="md:col-span-2"><label class="block text-sm font-bold text-gray-700 mb-2">لینک‌های مفید (فرمت: نام:لینک با کاما جدا شوند)</label> <input type="text" id="product-links" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="راهنمای سایز:https://example.com/size-guide, نحوه نگهداری:https://example.com/care">
+      </div>
+      <div class="flex items-center"><input type="checkbox" id="product-stock" class="ml-2 w-4 h-4 text-orange-600 rounded focus:ring-orange-500" checked> <label for="product-stock" class="text-sm font-bold text-gray-700">موجود در انبار</label>
+      </div>
+      <div class="flex justify-end"><button type="submit" id="add-product-btn" class="btn-primary text-white px-8 py-3 rounded-lg font-bold flex items-center"> <span class="loading-spinner hidden ml-2"></span> <i class="fas fa-plus ml-2"></i> افزودن محصول </button>
+      </div>
+     </form>
+    </div><!-- Products Management -->
+    <div class="bg-gray-50 p-6 rounded-lg mb-6">
+     <h3 class="text-xl font-bold mb-6 text-gray-800"><i class="fas fa-list text-blue-500 ml-2"></i> مدیریت محصولات موجود</h3>
+     <div id="admin-products-list" class="space-y-4"><!-- Admin products will be loaded here -->
+     </div>
+    </div>
+    <div class="flex justify-between"><button id="admin-logout-btn" class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-bold"> <i class="fas fa-sign-out-alt ml-2"></i> خروج از حساب </button> <button id="close-admin" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-bold"> <i class="fas fa-times ml-2"></i> بستن </button>
+    </div>
+   </div>
+  </div><!-- Product Detail Modal -->
+  <div id="product-modal" class="modal fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+   <div class="bg-white rounded-xl p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto mx-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8"><!-- Product Images -->
+     <div>
+      <div class="mb-4"><img id="main-product-image" src="" alt="" class="w-full h-96 object-cover rounded-lg">
+      </div>
+      <div id="product-image-gallery" class="image-gallery"><!-- Image thumbnails will be loaded here -->
+      </div>
+     </div><!-- Product Info -->
+     <div>
+      <h2 id="modal-product-name" class="text-3xl font-bold mb-4 text-gray-800"></h2>
+      <p id="modal-product-description" class="text-gray-600 mb-6"></p><!-- Price -->
+      <div class="mb-6"><span id="modal-product-price" class="text-3xl font-bold text-orange-600"></span>
+      </div><!-- Colors -->
+      <div id="color-selection" class="mb-6 hidden">
+       <h4 class="font-bold mb-3">انتخاب رنگ:</h4>
+       <div id="color-options" class="flex gap-3"><!-- Color options will be loaded here -->
+       </div>
+      </div><!-- Sizes -->
+      <div id="size-selection" class="mb-6 hidden">
+       <h4 class="font-bold mb-3">انتخاب سایز:</h4>
+       <div id="size-options" class="flex gap-3"><!-- Size options will be loaded here -->
+       </div>
+      </div><!-- Quantity -->
+      <div class="mb-6">
+       <h4 class="font-bold mb-3">تعداد:</h4>
+       <div class="flex items-center gap-3"><button id="decrease-qty" class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center font-bold">-</button> <span id="product-quantity" class="text-xl font-bold">1</span> <button id="increase-qty" class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center font-bold">+</button>
+       </div>
+      </div><!-- Add to Cart --> <button id="add-to-cart-btn" class="w-full btn-primary text-white py-4 rounded-lg font-bold text-lg mb-4"> <i class="fas fa-shopping-cart ml-2"></i> افزودن به سبد خرید </button> <!-- Product Links -->
+      <div id="product-links-section" class="mb-6 hidden">
+       <h4 class="font-bold mb-3">لینک‌های مفید:</h4>
+       <div id="product-links-list" class="space-y-2"><!-- Product links will be loaded here -->
+       </div>
+      </div><!-- Close Button --> <button id="close-product-modal" class="w-full bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-lg font-bold"> <i class="fas fa-times ml-2"></i> بستن </button>
+     </div>
+    </div><!-- Related Products -->
+    <div class="related-products mt-8">
+     <h3 class="text-xl font-bold mb-4"><i class="fas fa-heart text-red-500 ml-2"></i> محصولات مشابه</h3>
+     <div id="related-products-container" class="grid grid-cols-2 md:grid-cols-4 gap-4"><!-- Related products will be loaded here -->
+     </div>
+    </div>
+   </div>
+  </div><!-- Shopping Cart Modal -->
+  <div id="cart-modal" class="modal fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+   <div class="bg-white rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto mx-4">
+    <h2 class="text-2xl font-bold mb-6 text-gray-800"><i class="fas fa-shopping-cart text-orange-500 ml-2"></i> سبد خرید شما</h2>
+    <div id="cart-items" class="space-y-4 mb-6"><!-- Cart items will be loaded here -->
+    </div>
+    <div id="cart-empty" class="text-center py-8 hidden">
+     <div class="text-6xl mb-4">
+      🛒
+     </div>
+     <p class="text-gray-500">سبد خرید شما خالی است</p>
+    </div>
+    <div id="cart-summary" class="border-t pt-4 hidden">
+     <div class="flex justify-between items-center mb-4"><span class="text-lg font-bold">مجموع:</span> <span id="cart-total" class="text-2xl font-bold text-orange-600"></span>
+     </div><button id="checkout-btn" class="w-full btn-primary text-white py-4 rounded-lg font-bold text-lg"> <i class="fas fa-credit-card ml-2"></i> تکمیل خرید </button>
+    </div>
+    <div class="flex justify-center mt-4"><button id="close-cart" class="text-gray-500 hover:text-gray-700 font-bold"> بستن </button>
+    </div>
+   </div>
+  </div><!-- Floating Cart Button -->
+  <div class="floating-cart"><button id="floating-cart-btn" class="w-16 h-16 btn-primary text-white rounded-full shadow-lg hidden items-center justify-center"> <i class="fas fa-shopping-cart"></i> <span id="floating-cart-count" class="notification-badge hidden">0</span> </button>
+  </div>
+  <script>
+        let currentProducts = [];
+        let currentFilter = 'all';
+        let isLoading = false;
+        let isAdminLoggedIn = false;
+        let isUserLoggedIn = false;
+        let currentUser = null;
+        let shoppingCart = [];
+        let currentProductModal = null;
+        let selectedColor = null;
+        let selectedSize = null;
+        let productQuantity = 1;
+
+        const defaultConfig = {
+            store_name: 'الماس شرق',
+            store_tagline: 'بهترین کیفیت، بهترین قیمت',
+            welcome_message: 'به فروشگاه الماس شرق خوش آمدید',
+            telegram_support: 'http://t.me/rahmatedit',
+            email_contact: 'Enayatollaharashi@gmail.com',
+            instagram_page: '@almas_Sharq.af'
+        };
+
+        // Sample products data
+        const sampleProducts = [
+            {
+                id: 'sample1',
+                name: 'پیراهن زنانه مجلسی',
+                price: 450000,
+                category: 'لباس',
+                images: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400,https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=400',
+                description: 'پیراهن زیبا و شیک مناسب برای مهمانی‌ها و مجالس. ساخته شده از بهترین پارچه‌ها با دوخت حرفه‌ای.',
+                inStock: true,
+                colors: 'قرمز,آبی,مشکی',
+                sizes: 'S,M,L,XL',
+                colorPrices: 'قرمز:450000,آبی:470000,مشکی:480000',
+                links: 'راهنمای سایز:https://example.com/size-guide,نحوه نگهداری:https://example.com/care',
+                createdAt: new Date().toISOString()
+            },
+            {
+                id: 'sample2',
+                name: 'رژ لب مات قرمز',
+                price: 85000,
+                category: 'آرایش',
+                images: 'https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=400,https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400',
+                description: 'رژ لب با کیفیت بالا و ماندگاری عالی. فرمول مات با رنگ‌های زیبا و طبیعی.',
+                inStock: true,
+                colors: 'قرمز,صورتی,نارنجی',
+                sizes: '',
+                colorPrices: 'قرمز:85000,صورتی:80000,نارنجی:82000',
+                links: 'نحوه استفاده:https://example.com/usage',
+                createdAt: new Date().toISOString()
+            },
+            {
+                id: 'sample3',
+                name: 'کرم مرطوب‌کننده صورت',
+                price: 120000,
+                category: 'مراقبت',
+                images: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400',
+                description: 'کرم مرطوب‌کننده طبیعی برای انواع پوست. حاوی مواد طبیعی و مفید برای پوست.',
+                inStock: true,
+                colors: '',
+                sizes: '50ml,100ml',
+                colorPrices: '',
+                links: 'ترکیبات:https://example.com/ingredients',
+                createdAt: new Date().toISOString()
+            },
+            {
+                id: 'sample4',
+                name: 'عطر زنانه فرانسوی',
+                price: 280000,
+                category: 'عطر',
+                images: 'https://images.unsplash.com/photo-1541643600914-78b084683601?w=400',
+                description: 'عطر لوکس با رایحه گلی و شیرین. ساخت فرانسه با کیفیت بالا و ماندگاری طولانی.',
+                inStock: false,
+                colors: '',
+                sizes: '50ml,100ml',
+                colorPrices: '',
+                links: 'نت‌های عطر:https://example.com/notes',
+                createdAt: new Date().toISOString()
+            },
+            {
+                id: 'sample5',
+                name: 'شال و روسری ابریشمی',
+                price: 95000,
+                category: 'لباس',
+                images: 'https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?w=400,https://images.unsplash.com/photo-1583292650898-7d22cd27ca6f?w=400',
+                description: 'شال زیبا با طرح‌های متنوع و رنگ‌های شاد. ساخته شده از ابریشم طبیعی.',
+                inStock: true,
+                colors: 'آبی,سبز,بنفش',
+                sizes: '',
+                colorPrices: 'آبی:95000,سبز:98000,بنفش:100000',
+                links: 'نحوه نگهداری:https://example.com/silk-care',
+                createdAt: new Date().toISOString()
+            },
+            {
+                id: 'sample6',
+                name: 'پالت سایه چشم',
+                price: 150000,
+                category: 'آرایش',
+                images: 'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=400',
+                description: 'پالت 12 رنگ سایه چشم با کیفیت حرفه‌ای. رنگ‌های متنوع برای آرایش‌های مختلف.',
+                inStock: true,
+                colors: 'طلایی,نقره‌ای,برنزی',
+                sizes: '',
+                colorPrices: 'طلایی:150000,نقره‌ای:155000,برنزی:160000',
+                links: 'آموزش آرایش:https://example.com/makeup-tutorial',
+                createdAt: new Date().toISOString()
+            }
+        ];
+
+        // Data handler for SDK
+        const dataHandler = {
+            onDataChanged(data) {
+                currentProducts = data;
+                renderProducts();
+                renderNewProductsSlider();
+                if (isAdminLoggedIn) {
+                    renderAdminProducts();
+                }
+            }
+        };
+
+        // Initialize SDKs
+        async function initializeApp() {
+            try {
+                const initResult = await window.dataSdk.init(dataHandler);
+                if (!initResult.isOk) {
+                    showToast('خطا در اتصال به پایگاه داده', 'error');
+                    return;
+                }
+
+                if (window.elementSdk) {
+                    window.elementSdk.init({
+                        defaultConfig,
+                        render: async (config) => {
+                            document.getElementById('store-title').textContent = config.store_name || defaultConfig.store_name;
+                            document.getElementById('store-tagline').textContent = config.store_tagline || defaultConfig.store_tagline;
+                            document.getElementById('welcome-message').textContent = config.welcome_message || defaultConfig.welcome_message;
+                            document.getElementById('footer-email').textContent = config.email_contact || defaultConfig.email_contact;
+                            document.getElementById('footer-instagram').textContent = config.instagram_page || defaultConfig.instagram_page;
+                            
+                            const telegramLink = document.getElementById('footer-telegram');
+                            telegramLink.href = config.telegram_support || defaultConfig.telegram_support;
+                            telegramLink.textContent = (config.telegram_support || defaultConfig.telegram_support).replace('http://t.me/', '@');
+                        },
+                        mapToCapabilities: (config) => ({
+                            recolorables: [],
+                            borderables: [],
+                            fontEditable: undefined,
+                            fontSizeable: undefined
+                        }),
+                        mapToEditPanelValues: (config) => new Map([
+                            ['store_name', config.store_name || defaultConfig.store_name],
+                            ['store_tagline', config.store_tagline || defaultConfig.store_tagline],
+                            ['welcome_message', config.welcome_message || defaultConfig.welcome_message],
+                            ['telegram_support', config.telegram_support || defaultConfig.telegram_support],
+                            ['email_contact', config.email_contact || defaultConfig.email_contact],
+                            ['instagram_page', config.instagram_page || defaultConfig.instagram_page]
+                        ])
+                    });
+                }
+            } catch (error) {
+                showToast('خطا در راه‌اندازی برنامه', 'error');
+            }
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => toast.classList.add('show'), 100);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => document.body.removeChild(toast), 300);
+            }, 3000);
+        }
+
+        // Format price
+        function formatPrice(price) {
+            return new Intl.NumberFormat('fa-IR').format(price) + ' تومان';
+        }
+
+        // Scroll to products section
+        function scrollToProducts() {
+            document.getElementById('products-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Add sample products
+        async function addSampleProducts() {
+            if (currentProducts.length >= 999) {
+                showToast('حداکثر 999 محصول قابل اضافه کردن است', 'error');
+                return;
+            }
+
+            const btn = document.getElementById('add-sample-products');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading-spinner"></span> در حال افزودن...';
+
+            for (const product of sampleProducts) {
+                if (currentProducts.length >= 999) break;
+                try {
+                    await window.dataSdk.create(product);
+                } catch (error) {
+                    console.error('Error creating sample product:', error);
+                }
+            }
+
+            showToast('محصولات نمونه با موفقیت اضافه شدند', 'success');
+        }
+
+        // Render new products slider
+        function renderNewProductsSlider() {
+            const container = document.getElementById('new-products-slider');
+            const newProducts = currentProducts.slice(-6); // Last 6 products
+
+            if (newProducts.length === 0) {
+                container.innerHTML = '<p class="text-gray-500">محصول جدیدی یافت نشد</p>';
+                return;
+            }
+
+            container.innerHTML = newProducts.map(product => {
+                const firstImage = product.images ? product.images.split(',')[0].trim() : '';
+                return `
+                    <div class="product-card bg-white shadow-lg min-w-[250px] cursor-pointer" onclick="openProductModal('${product.__backendId}')">
+                        <div class="relative">
+                            ${firstImage ? `
+                                <img src="${firstImage}" alt="${product.name}" 
+                                     class="w-full h-40 object-cover"
+                                     onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="w-full h-40 bg-gradient-to-br from-pink-100 to-purple-100 hidden items-center justify-center">
+                                    <span class="text-3xl">🛍️</span>
+                                </div>
+                            ` : `
+                                <div class="w-full h-40 bg-gradient-to-br from-pink-100 to-purple-100 flex items-center justify-center">
+                                    <span class="text-3xl">🛍️</span>
+                                </div>
+                            `}
+                            ${!product.inStock ? '<div class="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded text-xs font-bold">ناموجود</div>' : ''}
+                            <div class="absolute top-2 left-2 bg-green-500 text-white px-2 py-1 rounded text-xs font-bold">جدید</div>
+                        </div>
+                        <div class="p-3">
+                            <h4 class="font-bold text-sm mb-1 text-gray-800 truncate">${product.name}</h4>
+                            <p class="text-xs text-gray-600 mb-2 line-clamp-2">${product.description ? product.description.substring(0, 50) + '...' : 'توضیحاتی ارائه نشده'}</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm font-bold text-orange-600">${formatPrice(product.price)}</span>
+                                <span class="text-xs bg-gray-100 px-2 py-1 rounded-full text-gray-600">${product.category}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Render products
+        function renderProducts() {
+            const container = document.getElementById('products-container');
+            const emptyState = document.getElementById('empty-state');
+            
+            let filteredProducts = currentProducts;
+            if (currentFilter !== 'all') {
+                filteredProducts = currentProducts.filter(product => product.category === currentFilter);
+            }
+
+            if (filteredProducts.length === 0) {
+                container.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            
+            container.innerHTML = filteredProducts.map(product => {
+                const firstImage = product.images ? product.images.split(',')[0].trim() : '';
+                return `
+                    <div class="product-card bg-white shadow-lg cursor-pointer" onclick="openProductModal('${product.__backendId}')">
+                        <div class="relative">
+                            ${firstImage ? `
+                                <img src="${firstImage}" alt="${product.name}" 
+                                     class="w-full h-56 object-cover"
+                                     onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="w-full h-56 bg-gradient-to-br from-pink-100 to-purple-100 hidden items-center justify-center">
+                                    <span class="text-4xl">🛍️</span>
+                                </div>
+                            ` : `
+                                <div class="w-full h-56 bg-gradient-to-br from-pink-100 to-purple-100 flex items-center justify-center">
+                                    <span class="text-4xl">🛍️</span>
+                                </div>
+                            `}
+                            ${!product.inStock ? '<div class="absolute top-3 right-3 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">ناموجود</div>' : ''}
+                        </div>
+                        <div class="p-5">
+                            <h3 class="font-bold text-lg mb-3 text-gray-800">${product.name}</h3>
+                            <p class="text-gray-600 text-sm mb-4 line-clamp-2">${product.description ? product.description.substring(0, 100) + '...' : 'توضیحاتی ارائه نشده'}</p>
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-xl font-bold text-orange-600">${formatPrice(product.price)}</span>
+                                <span class="text-sm bg-gray-100 px-3 py-1 rounded-full text-gray-600">${product.category}</span>
+                            </div>
+                            <button class="w-full btn-primary text-white py-3 rounded-lg font-bold ${!product.inStock ? 'opacity-50 cursor-not-allowed' : ''}" 
+                                    onclick="event.stopPropagation(); ${product.inStock ? `openProductModal('${product.__backendId}')` : ''}"
+                                    ${!product.inStock ? 'disabled' : ''}>
+                                <i class="fas fa-eye ml-2"></i>
+                                ${product.inStock ? 'مشاهده جزئیات' : 'ناموجود'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Open product modal
+        function openProductModal(productId) {
+            const product = currentProducts.find(p => p.__backendId === productId);
+            if (!product) return;
+
+            currentProductModal = product;
+            selectedColor = null;
+            selectedSize = null;
+            productQuantity = 1;
+
+            // Set product info
+            document.getElementById('modal-product-name').textContent = product.name;
+            document.getElementById('modal-product-description').textContent = product.description || 'توضیحاتی ارائه نشده';
+            document.getElementById('modal-product-price').textContent = formatPrice(product.price);
+            document.getElementById('product-quantity').textContent = productQuantity;
+
+            // Set main image
+            const images = product.images ? product.images.split(',').map(img => img.trim()) : [];
+            if (images.length > 0) {
+                document.getElementById('main-product-image').src = images[0];
+                document.getElementById('main-product-image').alt = product.name;
+            } else {
+                document.getElementById('main-product-image').src = '';
+                document.getElementById('main-product-image').alt = 'تصویر موجود نیست';
+            }
+
+            // Set image gallery
+            const gallery = document.getElementById('product-image-gallery');
+            if (images.length > 1) {
+                gallery.innerHTML = images.map((img, index) => `
+                    <img src="${img}" alt="${product.name}" 
+                         class="image-gallery-thumb ${index === 0 ? 'active' : ''}"
+                         onclick="changeMainImage('${img}', this)"
+                         onerror="this.style.display='none';">
+                `).join('');
+            } else {
+                gallery.innerHTML = '';
+            }
+
+            // Set colors
+            const colors = product.colors ? product.colors.split(',').map(color => color.trim()) : [];
+            const colorSection = document.getElementById('color-selection');
+            if (colors.length > 0) {
+                colorSection.classList.remove('hidden');
+                const colorOptions = document.getElementById('color-options');
+                colorOptions.innerHTML = colors.map(color => `
+                    <div class="color-option" 
+                         style="background-color: ${getColorCode(color)}"
+                         onclick="selectColor('${color}')"
+                         title="${color}">
+                    </div>
+                `).join('');
+            } else {
+                colorSection.classList.add('hidden');
+            }
+
+            // Set sizes
+            const sizes = product.sizes ? product.sizes.split(',').map(size => size.trim()) : [];
+            const sizeSection = document.getElementById('size-selection');
+            if (sizes.length > 0) {
+                sizeSection.classList.remove('hidden');
+                const sizeOptions = document.getElementById('size-options');
+                sizeOptions.innerHTML = sizes.map(size => `
+                    <div class="size-option" onclick="selectSize('${size}')">${size}</div>
+                `).join('');
+            } else {
+                sizeSection.classList.add('hidden');
+            }
+
+            // Set product links
+            const links = product.links ? product.links.split(',').map(link => link.trim()) : [];
+            const linksSection = document.getElementById('product-links-section');
+            if (links.length > 0) {
+                linksSection.classList.remove('hidden');
+                const linksList = document.getElementById('product-links-list');
+                linksList.innerHTML = links.map(link => {
+                    const [name, url] = link.split(':');
+                    return `
+                        <a href="${url}" target="_blank" rel="noopener noreferrer" 
+                           class="block text-blue-600 hover:text-blue-800 underline">
+                            <i class="fas fa-external-link-alt ml-1"></i>
+                            ${name}
+                        </a>
+                    `;
+                }).join('');
+            } else {
+                linksSection.classList.add('hidden');
+            }
+
+            // Load related products
+            loadRelatedProducts(product);
+
+            // Show modal
+            document.getElementById('product-modal').classList.remove('hidden');
+            document.getElementById('product-modal').classList.add('flex');
+        }
+
+        // Get color code for display
+        function getColorCode(colorName) {
+            const colorMap = {
+                'قرمز': '#ff0000',
+                'آبی': '#0000ff',
+                'سبز': '#00ff00',
+                'زرد': '#ffff00',
+                'مشکی': '#000000',
+                'سفید': '#ffffff',
+                'صورتی': '#ff69b4',
+                'بنفش': '#800080',
+                'نارنجی': '#ffa500',
+                'طلایی': '#ffd700',
+                'نقره‌ای': '#c0c0c0',
+                'برنزی': '#cd7f32'
+            };
+            return colorMap[colorName] || '#cccccc';
+        }
+
+        // Change main image
+        function changeMainImage(imageSrc, element) {
+            document.getElementById('main-product-image').src = imageSrc;
+            document.querySelectorAll('.image-gallery-thumb').forEach(thumb => thumb.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        // Select color
+        function selectColor(color) {
+            selectedColor = color;
+            document.querySelectorAll('.color-option').forEach(option => option.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update price if color pricing exists
+            updateProductPrice();
+        }
+
+        // Select size
+        function selectSize(size) {
+            selectedSize = size;
+            document.querySelectorAll('.size-option').forEach(option => option.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        // Update product price based on selected color
+        function updateProductPrice() {
+            if (!currentProductModal || !selectedColor) return;
+            
+            const colorPrices = currentProductModal.colorPrices ? currentProductModal.colorPrices.split(',').map(cp => cp.trim()) : [];
+            const colorPrice = colorPrices.find(cp => cp.startsWith(selectedColor + ':'));
+            
+            if (colorPrice) {
+                const price = parseInt(colorPrice.split(':')[1]);
+                document.getElementById('modal-product-price').textContent = formatPrice(price);
+            } else {
+                document.getElementById('modal-product-price').textContent = formatPrice(currentProductModal.price);
+            }
+        }
+
+        // Increase/decrease quantity
+        function changeQuantity(change) {
+            productQuantity = Math.max(1, productQuantity + change);
+            document.getElementById('product-quantity').textContent = productQuantity;
+        }
+
+        // Add to cart
+        function addToCart() {
+            if (!currentProductModal) return;
+            
+            const cartItem = {
+                id: currentProductModal.__backendId,
+                name: currentProductModal.name,
+                price: getCurrentProductPrice(),
+                quantity: productQuantity,
+                color: selectedColor,
+                size: selectedSize,
+                image: currentProductModal.images ? currentProductModal.images.split(',')[0].trim() : ''
+            };
+            
+            // Check if item already exists in cart
+            const existingItemIndex = shoppingCart.findIndex(item => 
+                item.id === cartItem.id && 
+                item.color === cartItem.color && 
+                item.size === cartItem.size
+            );
+            
+            if (existingItemIndex >= 0) {
+                shoppingCart[existingItemIndex].quantity += cartItem.quantity;
+            } else {
+                shoppingCart.push(cartItem);
+            }
+            
+            updateCartUI();
+            showToast('محصول به سبد خرید اضافه شد', 'success');
+            
+            // Close product modal
+            document.getElementById('product-modal').classList.add('hidden');
+            document.getElementById('product-modal').classList.remove('flex');
+        }
+
+        // Get current product price
+        function getCurrentProductPrice() {
+            if (!currentProductModal) return 0;
+            
+            if (selectedColor && currentProductModal.colorPrices) {
+                const colorPrices = currentProductModal.colorPrices.split(',').map(cp => cp.trim());
+                const colorPrice = colorPrices.find(cp => cp.startsWith(selectedColor + ':'));
+                if (colorPrice) {
+                    return parseInt(colorPrice.split(':')[1]);
+                }
+            }
+            
+            return currentProductModal.price;
+        }
+
+        // Update cart UI
+        function updateCartUI() {
+            const cartCount = shoppingCart.reduce((total, item) => total + item.quantity, 0);
+            const cartCountElements = document.querySelectorAll('#cart-count, #floating-cart-count');
+            
+            cartCountElements.forEach(element => {
+                if (cartCount > 0) {
+                    element.textContent = cartCount;
+                    element.classList.remove('hidden');
+                } else {
+                    element.classList.add('hidden');
+                }
+            });
+            
+            // Show/hide floating cart
+            const floatingCart = document.getElementById('floating-cart-btn');
+            if (cartCount > 0) {
+                floatingCart.classList.remove('hidden');
+                floatingCart.classList.add('flex');
+            } else {
+                floatingCart.classList.add('hidden');
+                floatingCart.classList.remove('flex');
+            }
+        }
+
+        // Open cart modal
+        function openCartModal() {
+            const cartItems = document.getElementById('cart-items');
+            const cartEmpty = document.getElementById('cart-empty');
+            const cartSummary = document.getElementById('cart-summary');
+            
+            if (shoppingCart.length === 0) {
+                cartItems.innerHTML = '';
+                cartEmpty.classList.remove('hidden');
+                cartSummary.classList.add('hidden');
+            } else {
+                cartEmpty.classList.add('hidden');
+                cartSummary.classList.remove('hidden');
+                
+                cartItems.innerHTML = shoppingCart.map((item, index) => `
+                    <div class="cart-item flex items-center justify-between bg-gray-50 p-4 rounded-lg">
+                        <div class="flex items-center space-x-4 space-x-reverse">
+                            ${item.image ? `
+                                <img src="${item.image}" alt="${item.name}" 
+                                     class="w-16 h-16 object-cover rounded"
+                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="w-16 h-16 bg-gray-200 rounded hidden items-center justify-center">
+                                    <span class="text-lg">🛍️</span>
+                                </div>
+                            ` : `
+                                <div class="w-16 h-16 bg-gray-200 rounded flex items-center justify-center">
+                                    <span class="text-lg">🛍️</span>
+                                </div>
+                            `}
+                            <div>
+                                <h4 class="font-bold text-gray-800">${item.name}</h4>
+                                <p class="text-sm text-gray-600">
+                                    ${item.color ? `رنگ: ${item.color}` : ''}
+                                    ${item.size ? ` - سایز: ${item.size}` : ''}
+                                </p>
+                                <p class="text-sm font-bold text-orange-600">${formatPrice(item.price)}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-3 space-x-reverse">
+                            <button onclick="changeCartItemQuantity(${index}, -1)" class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center font-bold">-</button>
+                            <span class="font-bold">${item.quantity}</span>
+                            <button onclick="changeCartItemQuantity(${index}, 1)" class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center font-bold">+</button>
+                            <button onclick="removeFromCart(${index})" class="text-red-500 hover:text-red-700 ml-2">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+                
+                const total = shoppingCart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                document.getElementById('cart-total').textContent = formatPrice(total);
+            }
+            
+            document.getElementById('cart-modal').classList.remove('hidden');
+            document.getElementById('cart-modal').classList.add('flex');
+        }
+
+        // Change cart item quantity
+        function changeCartItemQuantity(index, change) {
+            if (shoppingCart[index]) {
+                shoppingCart[index].quantity = Math.max(1, shoppingCart[index].quantity + change);
+                updateCartUI();
+                openCartModal(); // Refresh cart display
+            }
+        }
+
+        // Remove from cart
+        function removeFromCart(index) {
+            shoppingCart.splice(index, 1);
+            updateCartUI();
+            openCartModal(); // Refresh cart display
+            showToast('محصول از سبد خرید حذف شد', 'success');
+        }
+
+        // Checkout
+        function checkout() {
+            if (shoppingCart.length === 0) return;
+            
+            // Create order summary
+            const orderSummary = shoppingCart.map(item => 
+                `${item.name} (${item.quantity}x) - ${formatPrice(item.price * item.quantity)}`
+            ).join('\n');
+            
+            const total = shoppingCart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const message = `سفارش جدید:\n\n${orderSummary}\n\nمجموع: ${formatPrice(total)}`;
+            
+            // Redirect to Telegram
+            const telegramUrl = `http://t.me/rahmatedit?text=${encodeURIComponent(message)}`;
+            window.open(telegramUrl, '_blank', 'noopener,noreferrer');
+            
+            // Clear cart
+            shoppingCart = [];
+            updateCartUI();
+            
+            // Close cart modal
+            document.getElementById('cart-modal').classList.add('hidden');
+            document.getElementById('cart-modal').classList.remove('flex');
+            
+            showToast('شما به تلگرام هدایت شدید', 'success');
+        }
+
+        // Load related products
+        function loadRelatedProducts(currentProduct) {
+            const relatedProducts = currentProducts
+                .filter(p => p.category === currentProduct.category && p.__backendId !== currentProduct.__backendId)
+                .slice(0, 4);
+            
+            const container = document.getElementById('related-products-container');
+            
+            if (relatedProducts.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 col-span-full text-center">محصول مشابهی یافت نشد</p>';
+                return;
+            }
+            
+            container.innerHTML = relatedProducts.map(product => {
+                const firstImage = product.images ? product.images.split(',')[0].trim() : '';
+                return `
+                    <div class="product-card bg-white shadow-lg cursor-pointer" onclick="openProductModal('${product.__backendId}')">
+                        <div class="relative">
+                            ${firstImage ? `
+                                <img src="${firstImage}" alt="${product.name}" 
+                                     class="w-full h-32 object-cover"
+                                     onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="w-full h-32 bg-gradient-to-br from-pink-100 to-purple-100 hidden items-center justify-center">
+                                    <span class="text-2xl">🛍️</span>
+                                </div>
+                            ` : `
+                                <div class="w-full h-32 bg-gradient-to-br from-pink-100 to-purple-100 flex items-center justify-center">
+                                    <span class="text-2xl">🛍️</span>
+                                </div>
+                            `}
+                        </div>
+                        <div class="p-3">
+                            <h4 class="font-bold text-sm mb-1 text-gray-800 truncate">${product.name}</h4>
+                            <p class="text-xs font-bold text-orange-600">${formatPrice(product.price)}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Search products
+        function searchProducts(query) {
+            if (!query.trim()) {
+                document.getElementById('search-results').classList.add('hidden');
+                return;
+            }
+            
+            const results = currentProducts.filter(product => 
+                product.name.toLowerCase().includes(query.toLowerCase()) ||
+                product.description.toLowerCase().includes(query.toLowerCase()) ||
+                product.category.toLowerCase().includes(query.toLowerCase())
+            ).slice(0, 5);
+            
+            const resultsContainer = document.getElementById('search-results');
+            
+            if (results.length === 0) {
+                resultsContainer.innerHTML = '<div class="search-result-item text-gray-500">نتیجه‌ای یافت نشد</div>';
+            } else {
+                resultsContainer.innerHTML = results.map(product => `
+                    <div class="search-result-item" onclick="openProductModal('${product.__backendId}'); hideSearchResults();">
+                        <div class="flex items-center space-x-3 space-x-reverse">
+                            <div class="w-8 h-8 bg-gray-200 rounded flex items-center justify-center">
+                                <span class="text-sm">🛍️</span>
+                            </div>
+                            <div>
+                                <p class="font-bold text-sm">${product.name}</p>
+                                <p class="text-xs text-gray-600">${product.category} - ${formatPrice(product.price)}</p>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            resultsContainer.classList.remove('hidden');
+        }
+
+        // Hide search results
+        function hideSearchResults() {
+            document.getElementById('search-results').classList.add('hidden');
+            document.getElementById('search-input').value = '';
+        }
+
+        // Send feedback
+        async function sendFeedback(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('feedback-name').value;
+            const message = document.getElementById('feedback-message').value;
+            const btn = document.getElementById('feedback-btn');
+            const spinner = btn.querySelector('.loading-spinner');
+            
+            btn.disabled = true;
+            spinner.classList.remove('hidden');
+            
+            // Simulate sending to Telegram
+            setTimeout(() => {
+                const feedbackMessage = `نظر جدید:\n\nنام: ${name}\nپیام: ${message}`;
+                const telegramUrl = `http://t.me/rahmatedit?text=${encodeURIComponent(feedbackMessage)}`;
+                window.open(telegramUrl, '_blank', 'noopener,noreferrer');
+                
+                showToast('نظر شما ارسال شد', 'success');
+                document.getElementById('feedback-form').reset();
+                
+                btn.disabled = false;
+                spinner.classList.add('hidden');
+            }, 1000);
+        }
+
+        // Render admin products
+        function renderAdminProducts() {
+            const container = document.getElementById('admin-products-list');
+            
+            if (currentProducts.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-center py-4">هیچ محصولی یافت نشد</p>';
+                return;
+            }
+
+            container.innerHTML = currentProducts.map(product => {
+                const firstImage = product.images ? product.images.split(',')[0].trim() : '';
+                return `
+                    <div class="flex items-center justify-between bg-white p-4 rounded-lg border">
+                        <div class="flex items-center space-x-4 space-x-reverse">
+                            ${firstImage ? `
+                                <img src="${firstImage}" alt="${product.name}" 
+                                     class="w-16 h-16 object-cover rounded"
+                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="w-16 h-16 bg-gray-200 rounded hidden items-center justify-center">
+                                    <span class="text-lg">🛍️</span>
+                                </div>
+                            ` : `
+                                <div class="w-16 h-16 bg-gray-200 rounded flex items-center justify-center">
+                                    <span class="text-lg">🛍️</span>
+                                </div>
+                            `}
+                            <div>
+                                <h4 class="font-bold text-gray-800">${product.name}</h4>
+                                <p class="text-sm text-gray-600">${formatPrice(product.price)} - ${product.category}</p>
+                                <p class="text-xs text-gray-500">${product.colors ? 'رنگ‌ها: ' + product.colors : ''} ${product.sizes ? 'سایزها: ' + product.sizes : ''}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2 space-x-reverse">
+                            <span class="text-xs px-2 py-1 rounded-full ${product.inStock ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                                ${product.inStock ? 'موجود' : 'ناموجود'}
+                            </span>
+                            <button onclick="deleteProduct('${product.__backendId}')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm font-bold">
+                                <i class="fas fa-trash ml-1"></i>
+                                حذف
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Add product
+        async function addProduct(event) {
+            event.preventDefault();
+            
+            if (isLoading) return;
+            if (currentProducts.length >= 999) {
+                showToast('حداکثر 999 محصول قابل اضافه کردن است', 'error');
+                return;
+            }
+
+            isLoading = true;
+            const btn = document.getElementById('add-product-btn');
+            const spinner = btn.querySelector('.loading-spinner');
+            
+            btn.disabled = true;
+            spinner.classList.remove('hidden');
+
+            const productData = {
+                id: Date.now().toString(),
+                name: document.getElementById('product-name').value,
+                price: parseInt(document.getElementById('product-price').value),
+                category: document.getElementById('product-category').value,
+                images: document.getElementById('product-images').value,
+                description: document.getElementById('product-description').value,
+                inStock: document.getElementById('product-stock').checked,
+                colors: document.getElementById('product-colors').value,
+                sizes: document.getElementById('product-sizes').value,
+                colorPrices: document.getElementById('product-color-prices').value,
+                links: document.getElementById('product-links').value,
+                createdAt: new Date().toISOString()
+            };
+
+            try {
+                const result = await window.dataSdk.create(productData);
+                if (result.isOk) {
+                    showToast('محصول با موفقیت اضافه شد', 'success');
+                    document.getElementById('add-product-form').reset();
+                } else {
+                    showToast('خطا در افزودن محصول', 'error');
+                }
+            } catch (error) {
+                showToast('خطا در افزودن محصول', 'error');
+            } finally {
+                isLoading = false;
+                btn.disabled = false;
+                spinner.classList.add('hidden');
+            }
+        }
+
+        // Delete product
+        async function deleteProduct(productId) {
+            const product = currentProducts.find(p => p.__backendId === productId);
+            if (!product) return;
+
+            // Create inline confirmation
+            const productElement = event.target.closest('.flex');
+            const originalContent = productElement.innerHTML;
+            
+            productElement.innerHTML = `
+                <div class="flex items-center justify-between w-full bg-red-50 p-4 rounded-lg border border-red-200">
+                    <span class="text-red-800 font-bold">آیا مطمئن هستید که می‌خواهید "${product.name}" را حذف کنید؟</span>
+                    <div class="flex space-x-2 space-x-reverse">
+                        <button onclick="confirmDelete('${productId}')" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded font-bold">
+                            بله، حذف کن
+                        </button>
+                        <button onclick="cancelDelete(this, \`${originalContent.replace(/`/g, '\\`')}\`)" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded font-bold">
+                            انصراف
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Confirm delete
+        async function confirmDelete(productId) {
+            const product = currentProducts.find(p => p.__backendId === productId);
+            if (!product) return;
+
+            try {
+                const result = await window.dataSdk.delete(product);
+                if (result.isOk) {
+                    showToast('محصول با موفقیت حذف شد', 'success');
+                } else {
+                    showToast('خطا در حذف محصول', 'error');
+                }
+            } catch (error) {
+                showToast('خطا در حذف محصول', 'error');
+            }
+        }
+
+        // Cancel delete
+        function cancelDelete(button, originalContent) {
+            const productElement = button.closest('.flex');
+            productElement.innerHTML = originalContent;
+        }
+
+        // Filter products by category
+        function filterProducts(category) {
+            currentFilter = category;
+            
+            // Update active category button
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            renderProducts();
+        }
+
+        // Admin login
+        async function handleAdminLogin(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('admin-username').value;
+            const password = document.getElementById('admin-password').value;
+            const errorDiv = document.getElementById('admin-login-error');
+            const btn = document.getElementById('admin-login-btn');
+            const spinner = btn.querySelector('.loading-spinner');
+            
+            // Clear previous errors
+            errorDiv.classList.add('hidden');
+            
+            if (username === 'Enayatollah' && password === 'En12015@Ny') {
+                btn.disabled = true;
+                spinner.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    isAdminLoggedIn = true;
+                    showToast('با موفقیت وارد پنل مدیریت شدید', 'success');
+                    
+                    // Close login modal and open admin panel
+                    document.getElementById('admin-login-modal').classList.add('hidden');
+                    document.getElementById('admin-login-modal').classList.remove('flex');
+                    document.getElementById('admin-modal').classList.remove('hidden');
+                    document.getElementById('admin-modal').classList.add('flex');
+                    
+                    // Reset form
+                    document.getElementById('admin-login-form').reset();
+                    btn.disabled = false;
+                    spinner.classList.add('hidden');
+                    
+                    renderAdminProducts();
+                }, 1000);
+            } else {
+                errorDiv.textContent = 'نام کاربری یا رمز عبور اشتباه است';
+                errorDiv.classList.remove('hidden');
+            }
+        }
+
+        // User login (demo)
+        async function handleUserLogin(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('user-email-input').value;
+            const password = document.getElementById('user-password-input').value;
+            const errorDiv = document.getElementById('user-login-error');
+            const btn = document.getElementById('user-login-btn');
+            const spinner = btn.querySelector('.loading-spinner');
+            
+            btn.disabled = true;
+            spinner.classList.remove('hidden');
+            
+            // Simulate login
+            setTimeout(() => {
+                isUserLoggedIn = true;
+                currentUser = { name: 'کاربر عزیز', email: email };
+                
+                // Update UI
+                document.getElementById('user-status').textContent = currentUser.name;
+                document.getElementById('user-name').textContent = currentUser.name;
+                document.getElementById('user-email').textContent = currentUser.email;
+                document.getElementById('login-section').classList.add('hidden');
+                document.getElementById('user-section').classList.remove('hidden');
+                
+                showToast('با موفقیت وارد شدید', 'success');
+                
+                // Close modal
+                document.getElementById('login-modal').classList.add('hidden');
+                document.getElementById('login-modal').classList.remove('flex');
+                document.getElementById('user-dropdown').classList.add('hidden');
+                
+                // Reset form
+                document.getElementById('user-login-form').reset();
+                btn.disabled = false;
+                spinner.classList.add('hidden');
+            }, 1000);
+        }
+
+        // User logout
+        function handleUserLogout() {
+            isUserLoggedIn = false;
+            currentUser = null;
+            
+            // Update UI
+            document.getElementById('user-status').textContent = 'ورود / ثبت نام';
+            document.getElementById('login-section').classList.remove('hidden');
+            document.getElementById('user-section').classList.add('hidden');
+            document.getElementById('user-dropdown').classList.add('hidden');
+            
+            showToast('با موفقیت خارج شدید', 'success');
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+
+            // Admin panel
+            document.getElementById('admin-btn').addEventListener('click', function() {
+                if (isAdminLoggedIn) {
+                    document.getElementById('admin-modal').classList.remove('hidden');
+                    document.getElementById('admin-modal').classList.add('flex');
+                } else {
+                    document.getElementById('admin-login-modal').classList.remove('hidden');
+                    document.getElementById('admin-login-modal').classList.add('flex');
+                }
+            });
+
+            // User account
+            document.getElementById('user-btn').addEventListener('click', function() {
+                const dropdown = document.getElementById('user-dropdown');
+                dropdown.classList.toggle('hidden');
+            });
+
+            document.getElementById('login-btn').addEventListener('click', function() {
+                document.getElementById('user-dropdown').classList.add('hidden');
+                document.getElementById('login-modal').classList.remove('hidden');
+                document.getElementById('login-modal').classList.add('flex');
+            });
+
+            document.getElementById('logout-btn').addEventListener('click', handleUserLogout);
+
+            // Shopping cart
+            document.getElementById('cart-btn').addEventListener('click', openCartModal);
+            document.getElementById('floating-cart-btn').addEventListener('click', openCartModal);
+
+            // Search
+            document.getElementById('search-input').addEventListener('input', function() {
+                searchProducts(this.value);
+            });
+
+            // Close search results when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.search-container')) {
+                    hideSearchResults();
+                }
+                if (!e.target.closest('.user-menu')) {
+                    document.getElementById('user-dropdown').classList.add('hidden');
+                }
+            });
+
+            // Forms
+            document.getElementById('admin-login-form').addEventListener('submit', handleAdminLogin);
+            document.getElementById('user-login-form').addEventListener('submit', handleUserLogin);
+            document.getElementById('add-product-form').addEventListener('submit', addProduct);
+            document.getElementById('feedback-form').addEventListener('submit', sendFeedback);
+
+            // Product modal controls
+            document.getElementById('decrease-qty').addEventListener('click', () => changeQuantity(-1));
+            document.getElementById('increase-qty').addEventListener('click', () => changeQuantity(1));
+            document.getElementById('add-to-cart-btn').addEventListener('click', addToCart);
+            document.getElementById('checkout-btn').addEventListener('click', checkout);
+
+            // Category filters
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    filterProducts(this.dataset.category);
+                });
+            });
+
+            // Add sample products
+            document.getElementById('add-sample-products').addEventListener('click', addSampleProducts);
+
+            // Close modals
+            document.getElementById('close-admin-login').addEventListener('click', function() {
+                document.getElementById('admin-login-modal').classList.add('hidden');
+                document.getElementById('admin-login-modal').classList.remove('flex');
+            });
+
+            document.getElementById('close-user-login').addEventListener('click', function() {
+                document.getElementById('login-modal').classList.add('hidden');
+                document.getElementById('login-modal').classList.remove('flex');
+            });
+
+            document.getElementById('close-admin').addEventListener('click', function() {
+                document.getElementById('admin-modal').classList.add('hidden');
+                document.getElementById('admin-modal').classList.remove('flex');
+            });
+
+            document.getElementById('admin-logout-btn').addEventListener('click', function() {
+                isAdminLoggedIn = false;
+                showToast('با موفقیت از پنل مدیریت خارج شدید', 'success');
+                document.getElementById('admin-modal').classList.add('hidden');
+                document.getElementById('admin-modal').classList.remove('flex');
+            });
+
+            document.getElementById('close-product-modal').addEventListener('click', function() {
+                document.getElementById('product-modal').classList.add('hidden');
+                document.getElementById('product-modal').classList.remove('flex');
+            });
+
+            document.getElementById('close-cart').addEventListener('click', function() {
+                document.getElementById('cart-modal').classList.add('hidden');
+                document.getElementById('cart-modal').classList.remove('flex');
+            });
+
+            // Close modals on outside click
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        this.classList.add('hidden');
+                        this.classList.remove('flex');
+                    }
+                });
+            });
+        });
+
+        // Make functions global for onclick handlers
+        window.openProductModal = openProductModal;
+        window.changeMainImage = changeMainImage;
+        window.selectColor = selectColor;
+        window.selectSize = selectSize;
+        window.changeCartItemQuantity = changeCartItemQuantity;
+        window.removeFromCart = removeFromCart;
+        window.deleteProduct = deleteProduct;
+        window.confirmDelete = confirmDelete;
+        window.cancelDelete = cancelDelete;
+        window.scrollToProducts = scrollToProducts;
+        window.hideSearchResults = hideSearchResults;
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99185057215e70cb',t:'MTc2MDk2MTE5Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
