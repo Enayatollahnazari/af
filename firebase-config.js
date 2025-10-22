@@ -1,8 +1,8 @@
-// firebase-config.js
+// firebase-config.js - نسخه اصلاح شده
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
 import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
 
-// 🔧 تنظیمات REAL Firebase پروژه شما
+// تنظیمات Firebase شما
 const firebaseConfig = {
     apiKey: "AIzaSyC45gz-4c1291AYxluEr1Ces3XfTGwCt7Q",
     authDomain: "mysite-c28a2.firebaseapp.com",
@@ -16,12 +16,33 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// تابع برای بررسی اتصال
+async function testFirebaseConnection() {
+    try {
+        console.log('🔥 Testing Firebase connection...');
+        const testDoc = await addDoc(collection(db, "test"), {
+            message: "Connection test",
+            timestamp: new Date()
+        });
+        console.log('✅ Firebase connected successfully! Test ID:', testDoc.id);
+        
+        // حذف سند تست
+        await deleteDoc(testDoc);
+        return true;
+    } catch (error) {
+        console.error('❌ Firebase connection failed:', error);
+        return false;
+    }
+}
+
 // توابع مدیریت محصولات
 export const productsAPI = {
     async getProducts() {
         try {
+            console.log('📦 Loading products from Firebase...');
             const querySnapshot = await getDocs(collection(db, "products"));
             const products = [];
+            
             querySnapshot.forEach((doc) => {
                 const data = doc.data();
                 products.push({ 
@@ -31,71 +52,98 @@ export const productsAPI = {
                     category: data.category || '',
                     description: data.description || '',
                     inStock: data.inStock !== undefined ? data.inStock : true,
-                    images: Array.isArray(data.images) ? data.images.join(', ') : (data.images || ''),
-                    colors: Array.isArray(data.colors) ? data.colors.join(', ') : (data.colors || ''),
-                    sizes: Array.isArray(data.sizes) ? data.sizes.join(', ') : (data.sizes || ''),
+                    images: data.images || '',
+                    colors: data.colors || '',
+                    sizes: data.sizes || '',
                     createdAt: data.createdAt || new Date().toISOString()
                 });
             });
+            
+            console.log(`✅ Loaded ${products.length} products from Firebase`);
             return products;
         } catch (error) {
-            console.error("Error getting products: ", error);
-            throw error;
+            console.error("❌ Error loading products from Firebase:", error);
+            throw new Error(`خطا در بارگذاری محصولات: ${error.message}`);
         }
     },
 
     async addProduct(productData) {
         try {
-            const processedData = {
-                name: productData.name,
+            console.log('➕ Adding product to Firebase...', productData);
+            
+            // اعتبارسنجی داده‌ها
+            if (!productData.name || !productData.price || !productData.category) {
+                throw new Error('نام، قیمت و دسته‌بندی اجباری هستند');
+            }
+
+            const productToSave = {
+                name: productData.name.trim(),
                 price: parseInt(productData.price),
                 category: productData.category,
-                description: productData.description || '',
+                description: (productData.description || '').trim(),
                 inStock: Boolean(productData.inStock),
-                images: productData.images ? productData.images.split(',').map(img => img.trim()).filter(img => img) : [],
-                colors: productData.colors ? productData.colors.split(',').map(c => c.trim()).filter(c => c) : [],
-                sizes: productData.sizes ? productData.sizes.split(',').map(s => s.trim()).filter(s => s) : [],
+                images: (productData.images || '').trim(),
+                colors: (productData.colors || '').trim(),
+                sizes: (productData.sizes || '').trim(),
                 createdAt: new Date().toISOString()
             };
 
-            const docRef = await addDoc(collection(db, "products"), processedData);
-            return { id: docRef.id, ...processedData };
+            const docRef = await addDoc(collection(db, "products"), productToSave);
+            console.log('✅ Product added to Firebase with ID:', docRef.id);
+            
+            return { 
+                id: docRef.id, 
+                ...productToSave 
+            };
         } catch (error) {
-            console.error("Error adding product: ", error);
-            throw error;
+            console.error("❌ Error adding product to Firebase:", error);
+            throw new Error(`خطا در افزودن محصول: ${error.message}`);
         }
     },
 
     async deleteProduct(productId) {
         try {
+            console.log('🗑️ Deleting product from Firebase:', productId);
             await deleteDoc(doc(db, "products", productId));
+            console.log('✅ Product deleted from Firebase');
             return true;
         } catch (error) {
-            console.error("Error deleting product: ", error);
-            throw error;
+            console.error("❌ Error deleting product from Firebase:", error);
+            throw new Error(`خطا در حذف محصول: ${error.message}`);
         }
     },
 
     async updateProduct(productId, productData) {
         try {
-            const processedData = {
-                name: productData.name,
+            console.log('✏️ Updating product in Firebase:', productId);
+            
+            const productToUpdate = {
+                name: productData.name.trim(),
                 price: parseInt(productData.price),
                 category: productData.category,
-                description: productData.description || '',
+                description: (productData.description || '').trim(),
                 inStock: Boolean(productData.inStock),
-                images: productData.images ? productData.images.split(',').map(img => img.trim()).filter(img => img) : [],
-                colors: productData.colors ? productData.colors.split(',').map(c => c.trim()).filter(c => c) : [],
-                sizes: productData.sizes ? productData.sizes.split(',').map(s => s.trim()).filter(s => s) : []
+                images: (productData.images || '').trim(),
+                colors: (productData.colors || '').trim(),
+                sizes: (productData.sizes || '').trim()
             };
 
-            await updateDoc(doc(db, "products", productId), processedData);
-            return { id: productId, ...processedData };
+            await updateDoc(doc(db, "products", productId), productToUpdate);
+            console.log('✅ Product updated in Firebase');
+            
+            return { 
+                id: productId, 
+                ...productToUpdate 
+            };
         } catch (error) {
-            console.error("Error updating product: ", error);
-            throw error;
+            console.error("❌ Error updating product in Firebase:", error);
+            throw new Error(`خطا در به‌روزرسانی محصول: ${error.message}`);
         }
     }
 };
 
+// تست اتصال هنگام بارگذاری
+testFirebaseConnection();
+
 window.productsAPI = productsAPI;
+console.log('🔥 Firebase config loaded successfully');
