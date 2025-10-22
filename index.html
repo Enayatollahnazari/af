@@ -1,0 +1,1942 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سینما دانلود - بهترین فیلم‌ها و سریال‌ها</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        
+        @import url('https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css');
+        
+        * {
+            font-family: 'Vazir', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d1b1b 50%, #1a1a1a 100%);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(220, 38, 38, 0.3);
+        }
+        
+        .search-glow:focus {
+            box-shadow: 0 0 20px rgba(220, 38, 38, 0.5);
+        }
+        
+        .nav-item {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-item:hover::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #dc2626, #ef4444);
+        }
+        
+        .hero-overlay {
+            background: linear-gradient(45deg, rgba(0,0,0,0.8), rgba(220,38,38,0.3));
+        }
+        
+        @keyframes scroll {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        
+        .animate-scroll {
+            animation: scroll 30s linear infinite;
+        }
+        
+        .animate-scroll:hover {
+            animation-play-state: paused;
+        }
+        
+        /* Touch slider styles */
+        .slider-container {
+            overflow-x: auto;
+            overflow-y: hidden;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        
+        .slider-container::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .slider-track {
+            display: flex;
+            gap: 1.5rem;
+            padding: 0 1rem;
+            min-width: max-content;
+        }
+        
+        .movie-card {
+            flex: 0 0 auto;
+            width: 280px;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 640px) {
+            .movie-card {
+                width: 240px;
+            }
+            
+            .slider-track {
+                gap: 1rem;
+                padding: 0 0.5rem;
+            }
+            
+            .hero-section h2 {
+                font-size: 2rem !important;
+            }
+            
+            .hero-section p {
+                font-size: 1rem !important;
+            }
+            
+            .search-input {
+                width: 200px !important;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .movie-card {
+                width: 260px;
+            }
+            
+            .grid-responsive {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .movie-card {
+                width: 300px;
+            }
+        }
+        
+        /* Mobile menu styles */
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+        
+        /* Quality badge styles */
+        .quality-free {
+            background: linear-gradient(45deg, #10b981, #059669);
+        }
+        
+        .quality-premium {
+            background: linear-gradient(45deg, #f59e0b, #d97706);
+        }
+        
+        .quality-vip {
+            background: linear-gradient(45deg, #8b5cf6, #7c3aed);
+        }
+    </style>
+</head>
+<body class="h-full bg-black text-white">
+    <header class="gradient-bg shadow-2xl sticky top-0 z-50">
+        <nav class="container mx-auto px-4 sm:px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2 sm:space-x-4 space-x-reverse">
+                    <div class="text-xl sm:text-2xl font-bold text-red-500">🎬</div>
+                    <h1 class="text-lg sm:text-2xl font-bold bg-gradient-to-r from-red-500 to-red-300 bg-clip-text text-transparent">سینما دانلود</h1>
+                </div>
+                
+                <div class="hidden lg:flex items-center space-x-8 space-x-reverse">
+                    <a href="#" class="nav-item text-white hover:text-red-400 font-medium">خانه</a>
+                    <a href="#movies" class="nav-item text-white hover:text-red-400 font-medium">فیلم‌ها</a>
+                    <a href="#series" class="nav-item text-white hover:text-red-400 font-medium">سریال‌ها</a>
+                    <a href="#genres" class="nav-item text-white hover:text-red-400 font-medium">ژانرها</a>
+                    <a href="#contact" class="nav-item text-white hover:text-red-400 font-medium">تماس</a>
+                </div>
+                
+                <div class="flex items-center space-x-2 sm:space-x-4 space-x-reverse">
+                    <div class="relative">
+                        <input type="text" placeholder="جستجو..." class="search-input search-glow bg-gray-900 border border-gray-700 rounded-lg px-3 sm:px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:border-red-500 w-32 sm:w-48 lg:w-64 text-sm sm:text-base">
+                        <button class="absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-red-400">
+                            🔍
+                        </button>
+                    </div>
+                    <button id="loginBtn" class="hidden sm:block bg-red-600 hover:bg-red-700 text-white px-3 sm:px-4 py-2 rounded-lg transition-colors text-sm sm:text-base">
+                        ورود / ثبت نام
+                    </button>
+                    <button id="mobileMenuBtn" class="lg:hidden text-white text-xl">☰</button>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="mobile-menu fixed top-0 right-0 h-full w-80 bg-gray-900 border-l border-red-500 lg:hidden z-50">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-8">
+                    <h2 class="text-xl font-bold text-white">منو</h2>
+                    <button id="closeMobileMenu" class="text-red-400 text-2xl">✕</button>
+                </div>
+                <div class="space-y-6">
+                    <a href="#" class="block text-white hover:text-red-400 font-medium text-lg">خانه</a>
+                    <a href="#movies" class="block text-white hover:text-red-400 font-medium text-lg">فیلم‌ها</a>
+                    <a href="#series" class="block text-white hover:text-red-400 font-medium text-lg">سریال‌ها</a>
+                    <a href="#genres" class="block text-white hover:text-red-400 font-medium text-lg">ژانرها</a>
+                    <a href="#contact" class="block text-white hover:text-red-400 font-medium text-lg">تماس</a>
+                    <div class="pt-4 border-t border-gray-700">
+                        <button id="mobileLoginBtn" class="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg transition-colors">
+                            ورود / ثبت نام
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-section relative h-64 sm:h-80 lg:h-96 bg-cover bg-center" style="background-image: linear-gradient(rgba(0,0,0,0.7), rgba(220,38,38,0.3)), url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1200 600%22><rect fill=%22%23111%22 width=%221200%22 height=%22600%22/><circle fill=%22%23dc2626%22 opacity=%220.1%22 cx=%22200%22 cy=%22150%22 r=%2280%22/><circle fill=%22%23ef4444%22 opacity=%220.1%22 cx=%22800%22 cy=%22400%22 r=%22120%22/><circle fill=%22%23dc2626%22 opacity=%220.05%22 cx=%22600%22 cy=%22200%22 r=%22200%22/></svg>')">
+            <div class="hero-overlay absolute inset-0"></div>
+            <div class="relative container mx-auto px-4 sm:px-6 h-full flex items-center">
+                <div class="text-center w-full">
+                    <h2 class="text-2xl sm:text-3xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-white via-red-200 to-red-400 bg-clip-text text-transparent">بهترین فیلم‌ها و سریال‌ها</h2>
+                    <p class="text-sm sm:text-lg lg:text-xl text-gray-300 mb-6 sm:mb-8">با کیفیت بالا و لینک مستقیم دانلود کنید</p>
+                    <button class="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white font-bold py-2 sm:py-3 px-6 sm:px-8 rounded-lg transform hover:scale-105 transition-all duration-300 shadow-lg text-sm sm:text-base">
+                        شروع تماشا
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIP Subscription Banner -->
+        <section class="py-6 sm:py-8 bg-gradient-to-r from-red-600 to-red-800">
+            <div class="container mx-auto px-4 sm:px-6 text-center">
+                <h3 class="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-white">اشتراک VIP</h3>
+                <p class="text-red-100 mb-4 sm:mb-6 text-sm sm:text-base">دسترسی به محتوای ویژه و کیفیت بالا</p>
+                <button id="vipBtn" class="bg-white text-red-600 font-bold py-2 sm:py-3 px-6 sm:px-8 rounded-lg hover:bg-gray-100 transition-colors text-sm sm:text-base">
+                    خرید اشتراک VIP
+                </button>
+            </div>
+        </section>
+
+        <!-- New Releases Banner -->
+        <section class="py-3 sm:py-4 bg-gradient-to-r from-gray-900 to-black border-y border-red-500">
+            <div class="container mx-auto px-4 sm:px-6">
+                <div class="flex items-center">
+                    <span class="text-red-400 font-bold ml-2 sm:ml-4 text-sm sm:text-base whitespace-nowrap">🆕 جدیدترین‌ها:</span>
+                    <div class="flex-1 overflow-hidden">
+                        <div id="newReleasesBanner" class="flex animate-scroll whitespace-nowrap">
+                            <span class="inline-block mx-4 sm:mx-8 text-white hover:text-red-400 cursor-pointer transition-colors new-release-item text-sm sm:text-base" data-movie="دونکیرک ۲">دونکیرک ۲ (۲۰۲۴)</span>
+                            <span class="inline-block mx-4 sm:mx-8 text-white hover:text-red-400 cursor-pointer transition-colors new-release-item text-sm sm:text-base" data-movie="بتمن جدید">بتمن: شب تاریک (۲۰۲۴)</span>
+                            <span class="inline-block mx-4 sm:mx-8 text-white hover:text-red-400 cursor-pointer transition-colors new-release-item text-sm sm:text-base" data-movie="اسپایدرمن ۴">اسپایدرمن: بازگشت (۲۰۲۴)</span>
+                            <span class="inline-block mx-4 sm:mx-8 text-white hover:text-red-400 cursor-pointer transition-colors new-release-item text-sm sm:text-base" data-movie="آواتار ۳">آواتار: راه آب (۲۰۲۴)</span>
+                            <span class="inline-block mx-4 sm:mx-8 text-white hover:text-red-400 cursor-pointer transition-colors new-release-item text-sm sm:text-base" data-movie="تاپ گان ۳">تاپ گان: ماوریک ۲ (۲۰۲۴)</span>
+                            <span class="inline-block mx-4 sm:mx-8 text-white hover:text-red-400 cursor-pointer transition-colors new-release-item text-sm sm:text-base" data-movie="جان ویک ۵">جان ویک: فصل پنجم (۲۰۲۴)</span>
+                            <span class="inline-block mx-4 sm:mx-8 text-white hover:text-red-400 cursor-pointer transition-colors new-release-item text-sm sm:text-base" data-movie="فست ۱۱">سریع و خشمگین ۱۱ (۲۰۲۴)</span>
+                            <span class="inline-block mx-4 sm:mx-8 text-white hover:text-red-400 cursor-pointer transition-colors new-release-item text-sm sm:text-base" data-movie="مأموریت غیرممکن ۸">مأموریت غیرممکن ۸ (۲۰۲۴)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Countries Filter -->
+        <section class="py-6 sm:py-8 bg-gray-900">
+            <div class="container mx-auto px-4 sm:px-6">
+                <h3 class="text-lg sm:text-xl font-bold mb-4 text-white text-center">انتخاب بر اساس کشور</h3>
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:flex lg:flex-wrap justify-center gap-2 sm:gap-3">
+                    <button class="country-btn bg-gray-800 hover:bg-red-600 text-white px-3 sm:px-4 py-2 rounded-lg transition-colors text-sm sm:text-base" data-country="usa">🇺🇸 آمریکا</button>
+                    <button class="country-btn bg-gray-800 hover:bg-red-600 text-white px-3 sm:px-4 py-2 rounded-lg transition-colors text-sm sm:text-base" data-country="india">🇮🇳 هند</button>
+                    <button class="country-btn bg-gray-800 hover:bg-red-600 text-white px-3 sm:px-4 py-2 rounded-lg transition-colors text-sm sm:text-base" data-country="korea">🇰🇷 کره جنوبی</button>
+                    <button class="country-btn bg-gray-800 hover:bg-red-600 text-white px-3 sm:px-4 py-2 rounded-lg transition-colors text-sm sm:text-base" data-country="uk">🇬🇧 انگلستان</button>
+                    <button class="country-btn bg-gray-800 hover:bg-red-600 text-white px-3 sm:px-4 py-2 rounded-lg transition-colors text-sm sm:text-base" data-country="france">🇫🇷 فرانسه</button>
+                    <button class="country-btn bg-gray-800 hover:bg-red-600 text-white px-3 sm:px-4 py-2 rounded-lg transition-colors text-sm sm:text-base" data-country="japan">🇯🇵 ژاپن</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Special Offers -->
+        <section class="py-8 sm:py-12 lg:py-16 bg-gradient-to-b from-black to-gray-900">
+            <div class="container mx-auto px-4 sm:px-6">
+                <div class="flex items-center justify-between mb-6 sm:mb-8">
+                    <h3 class="text-xl sm:text-2xl lg:text-3xl font-bold">
+                        <span class="bg-gradient-to-r from-red-500 to-red-300 bg-clip-text text-transparent">🔥 پیشنهاد ویژه</span>
+                    </h3>
+                    <div class="hidden sm:flex space-x-2 space-x-reverse">
+                        <button class="slider-btn bg-gray-800 hover:bg-red-600 text-white p-2 rounded-lg" data-slider="special" data-direction="prev">‹</button>
+                        <button class="slider-btn bg-gray-800 hover:bg-red-600 text-white p-2 rounded-lg" data-slider="special" data-direction="next">›</button>
+                    </div>
+                </div>
+                <div class="slider-container" id="specialContainer">
+                    <div class="slider-track" id="specialSlider">
+                        <div class="movie-card card-hover bg-gray-900 rounded-lg overflow-hidden border border-red-500" data-movie='{"name":"فیلم اکشن پریمیوم","genre":"اکشن","year":"۲۰۲۴","country":"آمریکا","stars":"کریس همسورث، گال گادوت","director":"مایکل بی","dubbed":"دوبله فارسی","subtitle":"زیرنویس فارسی"}'>
+                            <div class="relative">
+                                <div class="h-48 sm:h-56 lg:h-64 bg-gradient-to-br from-red-900 to-black flex items-center justify-center">
+                                    <div class="text-4xl sm:text-5xl lg:text-6xl">👑</div>
+                                </div>
+                                <div class="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded text-xs sm:text-sm font-bold">VIP</div>
+                                <div class="absolute top-2 left-2 quality-vip text-white px-2 py-1 rounded text-xs font-bold">4K</div>
+                            </div>
+                            <div class="p-4 sm:p-6">
+                                <h4 class="text-lg sm:text-xl font-bold mb-2 text-white">فیلم اکشن پریمیوم</h4>
+                                <p class="text-gray-400 mb-4 text-sm sm:text-base">کیفیت 4K • زیرنویس فارسی</p>
+                                <button class="movie-details bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg w-full mb-2 transition-colors text-sm sm:text-base">
+                                    جزئیات بیشتر
+                                </button>
+                                <button class="vip-content bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg w-full text-sm sm:text-base">دانلود VIP</button>
+                            </div>
+                        </div>
+                        <div class="movie-card card-hover bg-gray-900 rounded-lg overflow-hidden border border-gray-800" data-movie='{"name":"هیجانی جدید","genre":"هیجانی","year":"۲۰۲۴","country":"انگلستان","stars":"تام هاردی، امیلی بلانت","director":"گای ریچی","dubbed":"دوبله فارسی","subtitle":"زیرنویس فارسی"}'>
+                            <div class="relative">
+                                <div class="h-48 sm:h-56 lg:h-64 bg-gradient-to-br from-red-800 to-black flex items-center justify-center">
+                                    <div class="text-4xl sm:text-5xl lg:text-6xl">🎯</div>
+                                </div>
+                                <div class="absolute top-2 left-2 quality-premium text-white px-2 py-1 rounded text-xs font-bold">1080p</div>
+                            </div>
+                            <div class="p-4 sm:p-6">
+                                <h4 class="text-lg sm:text-xl font-bold mb-2 text-white">هیجانی جدید</h4>
+                                <p class="text-gray-400 mb-4 text-sm sm:text-base">کیفیت HD • دوبله فارسی</p>
+                                <button class="movie-details bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg w-full mb-2 transition-colors text-sm sm:text-base">
+                                    جزئیات بیشتر
+                                </button>
+                                <button class="download-movie bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg w-full text-sm sm:text-base">دانلود</button>
+                            </div>
+                        </div>
+                        <div class="movie-card card-hover bg-gray-900 rounded-lg overflow-hidden border border-red-500" data-movie='{"name":"درام اسکار","genre":"درام","year":"۲۰۲۴","country":"آمریکا","stars":"لئوناردو دی کاپریو، مارگو رابی","director":"مارتین اسکورسیزی","dubbed":"دوبله فارسی","subtitle":"زیرنویس فارسی"}'>
+                            <div class="relative">
+                                <div class="h-48 sm:h-56 lg:h-64 bg-gradient-to-br from-red-700 to-black flex items-center justify-center">
+                                    <div class="text-4xl sm:text-5xl lg:text-6xl">💎</div>
+                                </div>
+                                <div class="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded text-xs sm:text-sm font-bold">VIP</div>
+                                <div class="absolute top-2 left-2 quality-vip text-white px-2 py-1 rounded text-xs font-bold">4K</div>
+                            </div>
+                            <div class="p-4 sm:p-6">
+                                <h4 class="text-lg sm:text-xl font-bold mb-2 text-white">درام اسکار</h4>
+                                <p class="text-gray-400 mb-4 text-sm sm:text-base">کیفیت 4K • بدون سانسور</p>
+                                <button class="movie-details bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg w-full mb-2 transition-colors text-sm sm:text-base">
+                                    جزئیات بیشتر
+                                </button>
+                                <button class="vip-content bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg w-full text-sm sm:text-base">دانلود VIP</button>
+                            </div>
+                        </div>
+                        <div class="movie-card card-hover bg-gray-900 rounded-lg overflow-hidden border border-gray-800" data-movie='{"name":"کمدی خانوادگی","genre":"کمدی","year":"۲۰۲۴","country":"آمریکا","stars":"ویل فرل، امی پولر","director":"آدام مک کی","dubbed":"دوبله فارسی","subtitle":"زیرنویس فارسی"}'>
+                            <div class="relative">
+                                <div class="h-48 sm:h-56 lg:h-64 bg-gradient-to-br from-blue-800 to-black flex items-center justify-center">
+                                    <div class="text-4xl sm:text-5xl lg:text-6xl">😂</div>
+                                </div>
+                                <div class="absolute top-2 left-2 quality-free text-white px-2 py-1 rounded text-xs font-bold">480p</div>
+                            </div>
+                            <div class="p-4 sm:p-6">
+                                <h4 class="text-lg sm:text-xl font-bold mb-2 text-white">کمدی خانوادگی</h4>
+                                <p class="text-gray-400 mb-4 text-sm sm:text-base">کیفیت SD • دوبله فارسی</p>
+                                <button class="movie-details bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg w-full mb-2 transition-colors text-sm sm:text-base">
+                                    جزئیات بیشتر
+                                </button>
+                                <button class="download-movie bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg w-full text-sm sm:text-base">دانلود رایگان</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Indian Movies -->
+        <section class="py-16 bg-gradient-to-b from-gray-900 to-black">
+            <div class="container mx-auto px-6">
+                <div class="flex items-center justify-between mb-8">
+                    <h3 class="text-3xl font-bold">
+                        <span class="bg-gradient-to-r from-red-500 to-red-300 bg-clip-text text-transparent">🇮🇳 فیلم‌های هندی</span>
+                    </h3>
+                    <div class="hidden sm:flex space-x-2 space-x-reverse">
+                        <button class="slider-btn bg-gray-800 hover:bg-red-600 text-white p-2 rounded-lg" data-slider="indian" data-direction="prev">‹</button>
+                        <button class="slider-btn bg-gray-800 hover:bg-red-600 text-white p-2 rounded-lg" data-slider="indian" data-direction="next">›</button>
+                    </div>
+                </div>
+                <div class="slider-container" id="indianContainer">
+                    <div class="slider-track" id="indianSlider">
+                        <div class="movie-card card-hover bg-gray-900 rounded-lg overflow-hidden border border-gray-800" data-movie='{"name":"بالیوود اکشن","genre":"اکشن","year":"۲۰۲۴","country":"هند","stars":"شاهرخ خان، دیپیکا پادوکونه","director":"روهیت شتی","dubbed":"دوبله فارسی","subtitle":"زیرنویس فارسی"}'>
+                            <div class="h-48 sm:h-56 lg:h-64 bg-gradient-to-br from-orange-600 to-red-800 flex items-center justify-center">
+                                <div class="text-4xl sm:text-5xl lg:text-6xl">🕺</div>
+                            </div>
+                            <div class="p-4 sm:p-6">
+                                <h4 class="text-lg sm:text-xl font-bold mb-2 text-white">بالیوود اکشن</h4>
+                                <p class="text-gray-400 mb-4 text-sm sm:text-base">۲۰۲۴ • دوبله فارسی</p>
+                                <button class="movie-details bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg w-full mb-2 transition-colors text-sm sm:text-base">
+                                    جزئیات بیشتر
+                                </button>
+                                <button class="download-movie bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg w-full text-sm sm:text-base">دانلود</button>
+                            </div>
+                        </div>
+                        <div class="movie-card card-hover bg-gray-900 rounded-lg overflow-hidden border border-red-500" data-movie='{"name":"رمانتیک هندی","genre":"عاشقانه","year":"۲۰۲۴","country":"هند","stars":"رنبیر کاپور، عالیا بهات","director":"کرن جوهر","dubbed":"دوبله فارسی","subtitle":"زیرنویس فارسی"}'>
+                            <div class="relative">
+                                <div class="h-48 sm:h-56 lg:h-64 bg-gradient-to-br from-yellow-600 to-red-700 flex items-center justify-center">
+                                    <div class="text-4xl sm:text-5xl lg:text-6xl">💃</div>
+                                </div>
+                                <div class="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded text-xs sm:text-sm font-bold">VIP</div>
+                                <div class="absolute top-2 left-2 quality-vip text-white px-2 py-1 rounded text-xs font-bold">4K</div>
+                            </div>
+                            <div class="p-4 sm:p-6">
+                                <h4 class="text-lg sm:text-xl font-bold mb-2 text-white">رمانتیک هندی</h4>
+                                <p class="text-gray-400 mb-4 text-sm sm:text-base">۲۰۲۴ • کیفیت 4K</p>
+                                <button class="movie-details bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg w-full mb-2 transition-colors text-sm sm:text-base">
+                                    جزئیات بیشتر
+                                </button>
+                                <button class="vip-content bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg w-full text-sm sm:text-base">دانلود VIP</button>
+                            </div>
+                        </div>
+                        <div class="movie-card card-hover bg-gray-900 rounded-lg overflow-hidden border border-gray-800" data-movie='{"name":"تاریخی هندی","genre":"تاریخی","year":"۲۰۲۳","country":"هند","stars":"رانویر سینگ، پریانکا چوپرا","director":"سنجای لیلا بهانسالی","dubbed":"زیرنویس فارسی","subtitle":"زیرنویس فارسی"}'>
+                            <div class="h-48 sm:h-56 lg:h-64 bg-gradient-to-br from-red-600 to-orange-800 flex items-center justify-center">
+                                <div class="text-4xl sm:text-5xl lg:text-6xl">🏛️</div>
+                            </div>
+                            <div class="p-4 sm:p-6">
+                                <h4 class="text-lg sm:text-xl font-bold mb-2 text-white">تاریخی هندی</h4>
+                                <p class="text-gray-400 mb-4 text-sm sm:text-base">۲۰۲۳ • زیرنویس فارسی</p>
+                                <button class="movie-details bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg w-full mb-2 transition-colors text-sm sm:text-base">
+                                    جزئیات بیشتر
+                                </button>
+                                <button class="download-movie bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg w-full text-sm sm:text-base">دانلود</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Korean Movies -->
+        <section class="py-16 bg-gradient-to-b from-black to-gray-900">
+            <div class="container mx-auto px-6">
+                <div class="flex items-center justify-between mb-8">
+                    <h3 class="text-3xl font-bold">
+                        <span class="bg-gradient-to-r from-red-500 to-red-300 bg-clip-text text-transparent">🇰🇷 فیلم‌های کره‌ای</span>
+                    </h3>
+                    <div class="hidden sm:flex space-x-2 space-x-reverse">
+                        <button class="slider-btn bg-gray-800 hover:bg-red-600 text-white p-2 rounded-lg" data-slider="korean" data-direction="prev">‹</button>
+                        <button class="slider-btn bg-gray-800 hover:bg-red-600 text-white p-2 rounded-lg" data-slider="korean" data-direction="next">›</button>
+                    </div>
+                </div>
+                <div class="slider-container" id="koreanContainer">
+                    <div class="slider-track" id="koreanSlider">
+                        <div class="movie-card card-hover bg-gray-900 rounded-lg overflow-hidden border border-gray-800" data-movie='{"name":"درام کره‌ای","genre":"درام","year":"۲۰۲۴","country":"کره جنوبی","stars":"سونگ جونگ کی، کیم تائه ری","director":"کیم ایون سوک","dubbed":"زیرنویس فارسی","subtitle":"زیرنویس فارسی"}'>
+                            <div class="h-48 sm:h-56 lg:h-64 bg-gradient-to-br from-pink-600 to-red-800 flex items-center justify-center">
+                                <div class="text-4xl sm:text-5xl lg:text-6xl">🌸</div>
+                            </div>
+                            <div class="p-4 sm:p-6">
+                                <h4 class="text-lg sm:text-xl font-bold mb-2 text-white">درام کره‌ای</h4>
+                                <p class="text-gray-400 mb-4 text-sm sm:text-base">۲۰۲۴ • زیرنویس فارسی</p>
+                                <button class="movie-details bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg w-full mb-2 transition-colors text-sm sm:text-base">
+                                    جزئیات بیشتر
+                                </button>
+                                <button class="download-movie bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg w-full text-sm sm:text-base">دانلود</button>
+                            </div>
+                        </div>
+                        <div class="movie-card card-hover bg-gray-900 rounded-lg overflow-hidden border border-red-500" data-movie='{"name":"تریلر کره‌ای","genre":"تریلر","year":"۲۰۲۴","country":"کره جنوبی","stars":"لی جونگ سوک، پارک شین هه","director":"بونگ جون هو","dubbed":"زیرنویس فارسی","subtitle":"زیرنویس فارسی"}'>
+                            <div class="relative">
+                                <div class="h-48 sm:h-56 lg:h-64 bg-gradient-to-br from-purple-600 to-red-700 flex items-center justify-center">
+                                    <div class="text-4xl sm:text-5xl lg:text-6xl">🎭</div>
+                                </div>
+                                <div class="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded text-xs sm:text-sm font-bold">VIP</div>
+                                <div class="absolute top-2 left-2 quality-vip text-white px-2 py-1 rounded text-xs font-bold">4K</div>
+                            </div>
+                            <div class="p-4 sm:p-6">
+                                <h4 class="text-lg sm:text-xl font-bold mb-2 text-white">تریلر کره‌ای</h4>
+                                <p class="text-gray-400 mb-4 text-sm sm:text-base">۲۰۲۴ • کیفیت 4K</p>
+                                <button class="movie-details bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg w-full mb-2 transition-colors text-sm sm:text-base">
+                                    جزئیات بیشتر
+                                </button>
+                                <button class="vip-content bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg w-full text-sm sm:text-base">دانلود VIP</button>
+                            </div>
+                        </div>
+                        <div class="movie-card card-hover bg-gray-900 rounded-lg overflow-hidden border border-gray-800" data-movie='{"name":"اکشن کره‌ای","genre":"اکشن","year":"۲۰۲۳","country":"کره جنوبی","stars":"ما دونگ سوک، یون یه جونگ","director":"ریو سونگ وان","dubbed":"دوبله فارسی","subtitle":"زیرنویس فارسی"}'>
+                            <div class="h-48 sm:h-56 lg:h-64 bg-gradient-to-br from-blue-600 to-red-800 flex items-center justify-center">
+                                <div class="text-4xl sm:text-5xl lg:text-6xl">⚔️</div>
+                            </div>
+                            <div class="p-4 sm:p-6">
+                                <h4 class="text-lg sm:text-xl font-bold mb-2 text-white">اکشن کره‌ای</h4>
+                                <p class="text-gray-400 mb-4 text-sm sm:text-base">۲۰۲۳ • دوبله فارسی</p>
+                                <button class="movie-details bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg w-full mb-2 transition-colors text-sm sm:text-base">
+                                    جزئیات بیشتر
+                                </button>
+                                <button class="download-movie bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg w-full text-sm sm:text-base">دانلود</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recently Dubbed -->
+        <section class="py-16 bg-gradient-to-b from-gray-900 to-black">
+            <div class="container mx-auto px-6">
+                <div class="flex items-center justify-between mb-8">
+                    <h3 class="text-3xl font-bold">
+                        <span class="bg-gradient-to-r from-red-500 to-red-300 bg-clip-text text-transparent">🎙️ تازه دوبله‌ها</span>
+                    </h3>
+                    <div class="hidden sm:flex space-x-2 space-x-reverse">
+                        <button class="slider-btn bg-gray-800 hover:bg-red-600 text-white p-2 rounded-lg" data-slider="dubbed" data-direction="prev">‹</button>
+                        <button class="slider-btn bg-gray-800 hover:bg-red-600 text-white p-2 rounded-lg" data-slider="dubbed" data-direction="next">›</button>
+                    </div>
+                </div>
+                <div class="slider-container" id="dubbedContainer">
+                    <div class="slider-track" id="dubbedSlider">
+                        <div class="movie-card card-hover bg-gray-900 rounded-lg overflow-hidden border border-gray-800" data-movie='{"name":"اکشن دوبله شده","genre":"اکشن","year":"۲۰۲۴","country":"آمریکا","stars":"جیسون استاتهام، میگان فاکس","director":"جان ویک","dubbed":"دوبله فارسی","subtitle":"زیرنویس فارسی"}'>
+                            <div class="relative">
+                                <div class="h-48 sm:h-56 lg:h-64 bg-gradient-to-br from-green-600 to-red-800 flex items-center justify-center">
+                                    <div class="text-4xl sm:text-5xl lg:text-6xl">🎬</div>
+                                </div>
+                                <div class="absolute top-2 right-2 bg-green-600 text-white px-2 py-1 rounded text-xs sm:text-sm font-bold">جدید</div>
+                                <div class="absolute top-2 left-2 quality-premium text-white px-2 py-1 rounded text-xs font-bold">720p</div>
+                            </div>
+                            <div class="p-4 sm:p-6">
+                                <h4 class="text-lg sm:text-xl font-bold mb-2 text-white">اکشن دوبله شده</h4>
+                                <p class="text-gray-400 mb-4 text-sm sm:text-base">دوبله فارسی • ۱۴۰۳</p>
+                                <button class="movie-details bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg w-full mb-2 transition-colors text-sm sm:text-base">
+                                    جزئیات بیشتر
+                                </button>
+                                <button class="download-movie bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg w-full text-sm sm:text-base">دانلود</button>
+                            </div>
+                        </div>
+                        <div class="movie-card card-hover bg-gray-900 rounded-lg overflow-hidden border border-red-500" data-movie='{"name":"درام دوبله VIP","genre":"درام","year":"۲۰۲۴","country":"فرانسه","stars":"ماریون کوتیار، ژان دوژاردن","director":"لوک بسون","dubbed":"دوبله فارسی","subtitle":"زیرنویس فارسی"}'>
+                            <div class="relative">
+                                <div class="h-48 sm:h-56 lg:h-64 bg-gradient-to-br from-blue-600 to-red-700 flex items-center justify-center">
+                                    <div class="text-4xl sm:text-5xl lg:text-6xl">🎭</div>
+                                </div>
+                                <div class="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded text-xs sm:text-sm font-bold">VIP</div>
+                                <div class="absolute top-2 left-2 bg-green-600 text-white px-2 py-1 rounded text-xs sm:text-sm font-bold">جدید</div>
+                            </div>
+                            <div class="p-4 sm:p-6">
+                                <h4 class="text-lg sm:text-xl font-bold mb-2 text-white">درام دوبله VIP</h4>
+                                <p class="text-gray-400 mb-4 text-sm sm:text-base">دوبله حرفه‌ای • کیفیت 4K</p>
+                                <button class="movie-details bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg w-full mb-2 transition-colors text-sm sm:text-base">
+                                    جزئیات بیشتر
+                                </button>
+                                <button class="vip-content bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg w-full text-sm sm:text-base">دانلود VIP</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Latest Updates -->
+        <section class="py-16 bg-gradient-to-b from-black to-gray-900">
+            <div class="container mx-auto px-6">
+                <div class="flex items-center justify-between mb-8">
+                    <h3 class="text-3xl font-bold">
+                        <span class="bg-gradient-to-r from-red-500 to-red-300 bg-clip-text text-transparent">🆕 بروزرسانی‌های تازه</span>
+                    </h3>
+                    <div class="hidden sm:flex space-x-2 space-x-reverse">
+                        <button class="slider-btn bg-gray-800 hover:bg-red-600 text-white p-2 rounded-lg" data-slider="updates" data-direction="prev">‹</button>
+                        <button class="slider-btn bg-gray-800 hover:bg-red-600 text-white p-2 rounded-lg" data-slider="updates" data-direction="next">›</button>
+                    </div>
+                </div>
+                <div class="slider-container" id="updatesContainer">
+                    <div class="slider-track" id="updatesSlider">
+                        <div class="movie-card card-hover bg-gray-900 rounded-lg overflow-hidden border border-gray-800" data-movie='{"name":"علمی تخیلی جدید","genre":"علمی تخیلی","year":"۲۰۲۴","country":"آمریکا","stars":"کیانو ریوز، آن هاتاوی","director":"ریدلی اسکات","dubbed":"دوبله فارسی","subtitle":"زیرنویس فارسی"}'>
+                            <div class="relative">
+                                <div class="h-48 sm:h-56 lg:h-64 bg-gradient-to-br from-cyan-600 to-red-800 flex items-center justify-center">
+                                    <div class="text-4xl sm:text-5xl lg:text-6xl">🚀</div>
+                                </div>
+                                <div class="absolute top-2 right-2 bg-cyan-600 text-white px-2 py-1 rounded text-xs sm:text-sm font-bold">بروز</div>
+                                <div class="absolute top-2 left-2 quality-premium text-white px-2 py-1 rounded text-xs font-bold">1080p</div>
+                            </div>
+                            <div class="p-4 sm:p-6">
+                                <h4 class="text-lg sm:text-xl font-bold mb-2 text-white">علمی تخیلی جدید</h4>
+                                <p class="text-gray-400 mb-4 text-sm sm:text-base">بروزرسانی شده • کیفیت بهتر</p>
+                                <button class="movie-details bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg w-full mb-2 transition-colors text-sm sm:text-base">
+                                    جزئیات بیشتر
+                                </button>
+                                <button class="download-movie bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg w-full text-sm sm:text-base">دانلود</button>
+                            </div>
+                        </div>
+                        <div class="movie-card card-hover bg-gray-900 rounded-lg overflow-hidden border border-gray-800" data-movie='{"name":"کمدی بروزشده","genre":"کمدی","year":"۲۰۲۴","country":"آمریکا","stars":"رایان رینولدز، بلیک لایولی","director":"شان لوی","dubbed":"دوبله فارسی","subtitle":"زیرنویس فارسی"}'>
+                            <div class="relative">
+                                <div class="h-48 sm:h-56 lg:h-64 bg-gradient-to-br from-purple-600 to-red-800 flex items-center justify-center">
+                                    <div class="text-4xl sm:text-5xl lg:text-6xl">🎪</div>
+                                </div>
+                                <div class="absolute top-2 right-2 bg-purple-600 text-white px-2 py-1 rounded text-xs sm:text-sm font-bold">بروز</div>
+                                <div class="absolute top-2 left-2 quality-free text-white px-2 py-1 rounded text-xs font-bold">480p</div>
+                            </div>
+                            <div class="p-4 sm:p-6">
+                                <h4 class="text-lg sm:text-xl font-bold mb-2 text-white">کمدی بروزشده</h4>
+                                <p class="text-gray-400 mb-4 text-sm sm:text-base">زیرنویس جدید • لینک سریع</p>
+                                <button class="movie-details bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg w-full mb-2 transition-colors text-sm sm:text-base">
+                                    جزئیات بیشتر
+                                </button>
+                                <button class="download-movie bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg w-full text-sm sm:text-base">دانلود</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Movies -->
+        <section id="movies" class="py-16 bg-gradient-to-b from-gray-900 to-black">
+            <div class="container mx-auto px-6">
+                <div class="flex items-center justify-between mb-8">
+                    <h3 class="text-3xl font-bold">
+                        <span class="bg-gradient-to-r from-red-500 to-red-300 bg-clip-text text-transparent">🎬 فیلم‌ها</span>
+                    </h3>
+                    <div class="hidden sm:flex space-x-2 space-x-reverse">
+                        <button class="slider-btn bg-gray-800 hover:bg-red-600 text-white p-2 rounded-lg" data-slider="movies" data-direction="prev">‹</button>
+                        <button class="slider-btn bg-gray-800 hover:bg-red-600 text-white p-2 rounded-lg" data-slider="movies" data-direction="next">›</button>
+                    </div>
+                </div>
+                <div class="slider-container" id="moviesContainer">
+                    <div class="slider-track" id="moviesSlider">
+                
+                        <div class="movie-card card-hover bg-gray-900 rounded-lg overflow-hidden border border-gray-800" data-movie='{"name":"فیلم اکشن جدید","genre":"اکشن","year":"۲۰۲۴","country":"آمریکا","stars":"تام کروز، اسکارلت جوهانسون","director":"کریستوفر نولان","dubbed":"دوبله فارسی","subtitle":"زیرنویس فارسی"}'>
+                            <div class="h-48 sm:h-56 lg:h-64 bg-gradient-to-br from-red-900 to-black flex items-center justify-center">
+                                <div class="text-4xl sm:text-5xl lg:text-6xl">🎭</div>
+                            </div>
+                            <div class="p-4 sm:p-6">
+                                <h4 class="text-lg sm:text-xl font-bold mb-2 text-white">فیلم اکشن جدید</h4>
+                                <p class="text-gray-400 mb-4 text-sm sm:text-base">یک فیلم هیجان‌انگیز با بازیگران مطرح</p>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-yellow-400">⭐ 8.5</span>
+                                    <span class="text-gray-400 text-sm">۲۰۲۴</span>
+                                </div>
+                                <button class="movie-details bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg w-full mb-2 transition-colors text-sm sm:text-base">
+                                    جزئیات بیشتر
+                                </button>
+                                <button class="download-movie bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg w-full transition-colors text-sm sm:text-base">
+                                    دانلود
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="movie-card card-hover bg-gray-900 rounded-lg overflow-hidden border border-gray-800" data-movie='{"name":"علمی تخیلی","genre":"علمی تخیلی","year":"۲۰۲۴","country":"انگلستان","stars":"رایان گاسلینگ، اما استون","director":"دنی ویلنوو","dubbed":"دوبله فارسی","subtitle":"زیرنویس فارسی"}'>
+                            <div class="h-48 sm:h-56 lg:h-64 bg-gradient-to-br from-red-800 to-black flex items-center justify-center">
+                                <div class="text-4xl sm:text-5xl lg:text-6xl">🚀</div>
+                            </div>
+                            <div class="p-4 sm:p-6">
+                                <h4 class="text-lg sm:text-xl font-bold mb-2 text-white">علمی تخیلی</h4>
+                                <p class="text-gray-400 mb-4 text-sm sm:text-base">سفری به آینده با جلوه‌های ویژه</p>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-yellow-400">⭐ 9.2</span>
+                                    <span class="text-gray-400 text-sm">۲۰۲۴</span>
+                                </div>
+                                <button class="movie-details bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg w-full mb-2 transition-colors text-sm sm:text-base">
+                                    جزئیات بیشتر
+                                </button>
+                                <button class="download-movie bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg w-full transition-colors text-sm sm:text-base">
+                                    دانلود
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="movie-card card-hover bg-gray-900 rounded-lg overflow-hidden border border-red-500" data-movie='{"name":"درام عاشقانه","genre":"عاشقانه","year":"۲۰۲۴","country":"فرانسه","stars":"تیموته شالامه، سیرشا رونان","director":"گرتا گرویگ","dubbed":"زیرنویس فارسی","subtitle":"زیرنویس فارسی"}'>
+                            <div class="relative">
+                                <div class="h-48 sm:h-56 lg:h-64 bg-gradient-to-br from-red-700 to-black flex items-center justify-center">
+                                    <div class="text-4xl sm:text-5xl lg:text-6xl">💝</div>
+                                </div>
+                                <div class="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded text-xs sm:text-sm font-bold">VIP</div>
+                                <div class="absolute top-2 left-2 quality-vip text-white px-2 py-1 rounded text-xs font-bold">4K</div>
+                            </div>
+                            <div class="p-4 sm:p-6">
+                                <h4 class="text-lg sm:text-xl font-bold mb-2 text-white">درام عاشقانه</h4>
+                                <p class="text-gray-400 mb-4 text-sm sm:text-base">داستانی احساسی و تأثیرگذار</p>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-yellow-400">⭐ 8.8</span>
+                                    <span class="text-gray-400 text-sm">۲۰۲۴</span>
+                                </div>
+                                <button class="movie-details bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg w-full mb-2 transition-colors text-sm sm:text-base">
+                                    جزئیات بیشتر
+                                </button>
+                                <button class="vip-content bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg w-full transition-colors text-sm sm:text-base">
+                                    دانلود VIP
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="movie-card card-hover bg-gray-900 rounded-lg overflow-hidden border border-gray-800" data-movie='{"name":"کمدی خانوادگی","genre":"کمدی","year":"۲۰۲۳","country":"آمریکا","stars":"ویل فرل، امی پولر","director":"آدام مک کی","dubbed":"دوبله فارسی","subtitle":"زیرنویس فارسی"}'>
+                            <div class="h-48 sm:h-56 lg:h-64 bg-gradient-to-br from-red-600 to-black flex items-center justify-center">
+                                <div class="text-4xl sm:text-5xl lg:text-6xl">😂</div>
+                            </div>
+                            <div class="p-4 sm:p-6">
+                                <h4 class="text-lg sm:text-xl font-bold mb-2 text-white">کمدی خانوادگی</h4>
+                                <p class="text-gray-400 mb-4 text-sm sm:text-base">سرگرمی برای تمام خانواده</p>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-yellow-400">⭐ 7.9</span>
+                                    <span class="text-gray-400 text-sm">۲۰۲۳</span>
+                                </div>
+                                <button class="movie-details bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg w-full mb-2 transition-colors text-sm sm:text-base">
+                                    جزئیات بیشتر
+                                </button>
+                                <button class="download-movie bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg w-full transition-colors text-sm sm:text-base">
+                                    دانلود
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TV Series -->
+        <section id="series" class="py-16 bg-gradient-to-b from-black to-gray-900">
+            <div class="container mx-auto px-6">
+                <div class="flex items-center justify-between mb-8">
+                    <h3 class="text-3xl font-bold">
+                        <span class="bg-gradient-to-r from-red-500 to-red-300 bg-clip-text text-transparent">📺 سریال‌ها</span>
+                    </h3>
+                    <div class="hidden sm:flex space-x-2 space-x-reverse">
+                        <button class="slider-btn bg-gray-800 hover:bg-red-600 text-white p-2 rounded-lg" data-slider="series" data-direction="prev">‹</button>
+                        <button class="slider-btn bg-gray-800 hover:bg-red-600 text-white p-2 rounded-lg" data-slider="series" data-direction="next">›</button>
+                    </div>
+                </div>
+                <div class="slider-container" id="seriesContainer">
+                    <div class="slider-track" id="seriesSlider">
+                        <div class="movie-card card-hover bg-gray-900 rounded-lg overflow-hidden border border-gray-800" data-movie='{"name":"سریال جنایی","genre":"جنایی","year":"۲۰۲۴","country":"آمریکا","stars":"برایان کرانستون، آرون پال","director":"وینس گیلیگان","dubbed":"دوبله فارسی","subtitle":"زیرنویس فارسی"}'>
+                            <div class="h-48 sm:h-56 lg:h-64 bg-gradient-to-br from-red-900 to-black flex items-center justify-center">
+                                <div class="text-4xl sm:text-5xl lg:text-6xl">📺</div>
+                            </div>
+                            <div class="p-4 sm:p-6">
+                                <h4 class="text-lg sm:text-xl font-bold mb-2 text-white">سریال جنایی</h4>
+                                <p class="text-gray-400 mb-4 text-sm sm:text-base">۳ فصل • ۲۴ قسمت</p>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-yellow-400">⭐ 9.5</span>
+                                    <span class="text-gray-400 text-sm">۲۰۲۴</span>
+                                </div>
+                                <button class="movie-details bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg w-full mb-2 transition-colors text-sm sm:text-base">
+                                    جزئیات بیشتر
+                                </button>
+                                <button class="download-movie bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg w-full transition-colors text-sm sm:text-base">
+                                    تماشا
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="movie-card card-hover bg-gray-900 rounded-lg overflow-hidden border border-red-500" data-movie='{"name":"فانتزی حماسی","genre":"فانتزی","year":"۲۰۲۳","country":"انگلستان","stars":"امیلیا کلارک، کیت هرینگتون","director":"دیوید بنیوف","dubbed":"دوبله فارسی","subtitle":"زیرنویس فارسی"}'>
+                            <div class="relative">
+                                <div class="h-48 sm:h-56 lg:h-64 bg-gradient-to-br from-red-800 to-black flex items-center justify-center">
+                                    <div class="text-4xl sm:text-5xl lg:text-6xl">🏰</div>
+                                </div>
+                                <div class="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded text-xs sm:text-sm font-bold">VIP</div>
+                                <div class="absolute top-2 left-2 quality-vip text-white px-2 py-1 rounded text-xs font-bold">4K</div>
+                            </div>
+                            <div class="p-4 sm:p-6">
+                                <h4 class="text-lg sm:text-xl font-bold mb-2 text-white">فانتزی حماسی</h4>
+                                <p class="text-gray-400 mb-4 text-sm sm:text-base">۸ فصل • ۷۳ قسمت</p>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-yellow-400">⭐ 9.8</span>
+                                    <span class="text-gray-400 text-sm">۲۰۲۳</span>
+                                </div>
+                                <button class="movie-details bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg w-full mb-2 transition-colors text-sm sm:text-base">
+                                    جزئیات بیشتر
+                                </button>
+                                <button class="vip-content bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg w-full transition-colors text-sm sm:text-base">
+                                    تماشا VIP
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="movie-card card-hover bg-gray-900 rounded-lg overflow-hidden border border-gray-800" data-movie='{"name":"معمایی هیجانی","genre":"معمایی","year":"۲۰۲۴","country":"انگلستان","stars":"بندیکت کامبربچ، مارتین فریمن","director":"استیون موفات","dubbed":"زیرنویس فارسی","subtitle":"زیرنویس فارسی"}'>
+                            <div class="h-48 sm:h-56 lg:h-64 bg-gradient-to-br from-red-700 to-black flex items-center justify-center">
+                                <div class="text-4xl sm:text-5xl lg:text-6xl">🕵️</div>
+                            </div>
+                            <div class="p-4 sm:p-6">
+                                <h4 class="text-lg sm:text-xl font-bold mb-2 text-white">معمایی هیجانی</h4>
+                                <p class="text-gray-400 mb-4 text-sm sm:text-base">۲ فصل • ۱۶ قسمت</p>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-yellow-400">⭐ 8.7</span>
+                                    <span class="text-gray-400 text-sm">۲۰۲۴</span>
+                                </div>
+                                <button class="movie-details bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg w-full mb-2 transition-colors text-sm sm:text-base">
+                                    جزئیات بیشتر
+                                </button>
+                                <button class="download-movie bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg w-full transition-colors text-sm sm:text-base">
+                                    تماشا
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="movie-card card-hover bg-gray-900 rounded-lg overflow-hidden border border-red-500" data-movie='{"name":"کمدی طنز","genre":"کمدی","year":"۲۰۲۴","country":"آمریکا","stars":"استیو کارل، رایکی جرویس","director":"گرگ دانیلز","dubbed":"دوبله فارسی","subtitle":"زیرنویس فارسی"}'>
+                            <div class="relative">
+                                <div class="h-48 sm:h-56 lg:h-64 bg-gradient-to-br from-red-600 to-black flex items-center justify-center">
+                                    <div class="text-4xl sm:text-5xl lg:text-6xl">🎪</div>
+                                </div>
+                                <div class="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded text-xs sm:text-sm font-bold">VIP</div>
+                                <div class="absolute top-2 left-2 quality-vip text-white px-2 py-1 rounded text-xs font-bold">4K</div>
+                            </div>
+                            <div class="p-4 sm:p-6">
+                                <h4 class="text-lg sm:text-xl font-bold mb-2 text-white">کمدی طنز</h4>
+                                <p class="text-gray-400 mb-4 text-sm sm:text-base">۵ فصل • ۴۲ قسمت</p>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-yellow-400">⭐ 8.9</span>
+                                    <span class="text-gray-400 text-sm">۲۰۲۴</span>
+                                </div>
+                                <button class="movie-details bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg w-full mb-2 transition-colors text-sm sm:text-base">
+                                    جزئیات بیشتر
+                                </button>
+                                <button class="vip-content bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg w-full transition-colors text-sm sm:text-base">
+                                    تماشا VIP
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Genres -->
+        <section id="genres" class="py-8 sm:py-12 lg:py-16 bg-gradient-to-b from-black to-gray-900">
+            <div class="container mx-auto px-4 sm:px-6">
+                <h3 class="text-xl sm:text-2xl lg:text-3xl font-bold mb-6 sm:mb-8 text-center">
+                    <span class="bg-gradient-to-r from-red-500 to-red-300 bg-clip-text text-transparent">دسته‌بندی ژانرها</span>
+                </h3>
+                
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
+                    <button class="bg-gradient-to-br from-red-600 to-red-800 hover:from-red-700 hover:to-red-900 text-white font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-lg transform hover:scale-105 transition-all duration-300 text-sm sm:text-base">
+                        اکشن
+                    </button>
+                    <button class="bg-gradient-to-br from-red-600 to-red-800 hover:from-red-700 hover:to-red-900 text-white font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-lg transform hover:scale-105 transition-all duration-300 text-sm sm:text-base">
+                        کمدی
+                    </button>
+                    <button class="bg-gradient-to-br from-red-600 to-red-800 hover:from-red-700 hover:to-red-900 text-white font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-lg transform hover:scale-105 transition-all duration-300 text-sm sm:text-base">
+                        درام
+                    </button>
+                    <button class="bg-gradient-to-br from-red-600 to-red-800 hover:from-red-700 hover:to-red-900 text-white font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-lg transform hover:scale-105 transition-all duration-300 text-sm sm:text-base">
+                        ترسناک
+                    </button>
+                    <button class="bg-gradient-to-br from-red-600 to-red-800 hover:from-red-700 hover:to-red-900 text-white font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-lg transform hover:scale-105 transition-all duration-300 text-sm sm:text-base">
+                        علمی تخیلی
+                    </button>
+                    <button class="bg-gradient-to-br from-red-600 to-red-800 hover:from-red-700 hover:to-red-900 text-white font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-lg transform hover:scale-105 transition-all duration-300 text-sm sm:text-base">
+                        عاشقانه
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="contact" class="gradient-bg py-8 sm:py-12">
+        <div class="container mx-auto px-4 sm:px-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                <div class="sm:col-span-2 lg:col-span-1">
+                    <div class="flex items-center space-x-2 space-x-reverse mb-4">
+                        <div class="text-xl sm:text-2xl">🎬</div>
+                        <h4 class="text-lg sm:text-xl font-bold text-red-400">سینما دانلود</h4>
+                    </div>
+                    <p class="text-gray-400 text-sm sm:text-base">بهترین مرجع دانلود فیلم و سریال با کیفیت بالا</p>
+                </div>
+                
+                <div>
+                    <h5 class="text-base sm:text-lg font-bold mb-3 sm:mb-4 text-white">لینک‌های مفید</h5>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-red-400 transition-colors footer-link text-sm sm:text-base" data-page="about">درباره ما</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-red-400 transition-colors footer-link text-sm sm:text-base" data-page="rules">قوانین سایت</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-red-400 transition-colors footer-link text-sm sm:text-base" data-page="contact">تماس با ما</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-red-400 transition-colors footer-link text-sm sm:text-base" data-page="faq">سوالات متداول</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h5 class="text-base sm:text-lg font-bold mb-3 sm:mb-4 text-white">شبکه‌های اجتماعی</h5>
+                    <div class="space-y-3">
+                        <a href="https://instagram.com/Cinemadl.af" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-2 sm:space-x-3 space-x-reverse text-gray-400 hover:text-red-400 transition-colors">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            </svg>
+                            <span class="text-sm sm:text-base">اینستاگرام: Cinemadl.af</span>
+                        </a>
+                        <a href="https://t.me/Cinemadl_af" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-2 sm:space-x-3 space-x-reverse text-gray-400 hover:text-red-400 transition-colors">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                            </svg>
+                            <span class="text-sm sm:text-base">تلگرام: Cinemadl_af</span>
+                        </a>
+                        <a href="mailto:Cinemadl.af@gmail.com" class="flex items-center space-x-2 sm:space-x-3 space-x-reverse text-gray-400 hover:text-red-400 transition-colors">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-.904.732-1.636 1.636-1.636h.749L12 10.724l9.615-6.903h.749c.904 0 1.636.732 1.636 1.636z"/>
+                            </svg>
+                            <span class="text-sm sm:text-base">ایمیل: Cinemadl.af@gmail.com</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-6 sm:mt-8 pt-6 sm:pt-8 text-center">
+                <p class="text-gray-400 text-sm sm:text-base">© ۲۰۲۴ سینما دانلود. تمامی حقوق محفوظ است.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // User Status
+        let isVipUser = false;
+        let isLoggedIn = false;
+        let currentUser = null;
+        
+        // Slider positions
+        const sliderPositions = {
+            special: 0,
+            indian: 0,
+            korean: 0,
+            dubbed: 0,
+            updates: 0,
+            movies: 0,
+            series: 0
+        };
+
+        // Login Button functionality
+        document.getElementById('loginBtn').addEventListener('click', function() {
+            if (isLoggedIn) {
+                showUserProfile();
+            } else {
+                showLoginModal();
+            }
+        });
+
+        function showLoginModal() {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center';
+            modal.innerHTML = `
+                <div class="bg-gray-900 p-8 rounded-lg max-w-md w-full mx-4 border border-red-500">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-bold text-white">ورود به حساب کاربری</h3>
+                        <button onclick="this.closest('.fixed').remove()" class="text-red-400 hover:text-red-300 text-2xl">✕</button>
+                    </div>
+                    <div id="loginForm">
+                        <div class="space-y-4 mb-6">
+                            <div>
+                                <label for="loginEmail" class="block text-white mb-2">ایمیل:</label>
+                                <input type="email" id="loginEmail" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-red-500" placeholder="example@email.com">
+                            </div>
+                            <div>
+                                <label for="loginPassword" class="block text-white mb-2">رمز عبور:</label>
+                                <input type="password" id="loginPassword" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-red-500" placeholder="رمز عبور">
+                            </div>
+                        </div>
+                        <div class="flex gap-3 mb-4">
+                            <button onclick="handleLogin()" class="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg transition-colors">
+                                ورود
+                            </button>
+                            <button onclick="showRegisterForm()" class="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-lg transition-colors">
+                                ثبت نام
+                            </button>
+                        </div>
+                        <div class="text-center">
+                            <button class="text-red-400 hover:text-red-300 text-sm">فراموشی رمز عبور؟</button>
+                        </div>
+                    </div>
+                    <div id="registerForm" style="display: none;">
+                        <div class="space-y-4 mb-6">
+                            <div>
+                                <label for="registerName" class="block text-white mb-2">نام و نام خانوادگی:</label>
+                                <input type="text" id="registerName" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-red-500" placeholder="نام کامل">
+                            </div>
+                            <div>
+                                <label for="registerEmail" class="block text-white mb-2">ایمیل:</label>
+                                <input type="email" id="registerEmail" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-red-500" placeholder="example@email.com">
+                            </div>
+                            <div>
+                                <label for="registerPassword" class="block text-white mb-2">رمز عبور:</label>
+                                <input type="password" id="registerPassword" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-red-500" placeholder="رمز عبور">
+                            </div>
+                            <div>
+                                <label for="confirmPassword" class="block text-white mb-2">تکرار رمز عبور:</label>
+                                <input type="password" id="confirmPassword" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-red-500" placeholder="تکرار رمز عبور">
+                            </div>
+                        </div>
+                        <div class="flex gap-3 mb-4">
+                            <button onclick="handleRegister()" class="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg transition-colors">
+                                ثبت نام
+                            </button>
+                            <button onclick="showLoginForm()" class="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-lg transition-colors">
+                                بازگشت به ورود
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function showRegisterForm() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'block';
+            document.querySelector('.fixed h3').textContent = 'ثبت نام حساب کاربری';
+        }
+
+        function showLoginForm() {
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'block';
+            document.querySelector('.fixed h3').textContent = 'ورود به حساب کاربری';
+        }
+
+        function handleLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!email || !password) {
+                showNotification('لطفاً تمام فیلدها را پر کنید', 'error');
+                return;
+            }
+            
+            // Simulate login process
+            isLoggedIn = true;
+            currentUser = {
+                name: 'کاربر عزیز',
+                email: email,
+                joinDate: '۱۴۰۳/۰۸/۱۵',
+                downloads: 23,
+                favorites: 12
+            };
+            
+            document.getElementById('loginBtn').textContent = currentUser.name;
+            document.getElementById('loginBtn').className = 'hidden md:block bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors';
+            
+            // Close modal
+            document.querySelector('.fixed').remove();
+            
+            showNotification('با موفقیت وارد شدید!', 'success');
+        }
+
+        function handleRegister() {
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (!name || !email || !password || !confirmPassword) {
+                showNotification('لطفاً تمام فیلدها را پر کنید', 'error');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showNotification('رمز عبور و تکرار آن یکسان نیستند', 'error');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showNotification('رمز عبور باید حداقل ۶ کاراکتر باشد', 'error');
+                return;
+            }
+            
+            // Simulate registration process
+            isLoggedIn = true;
+            currentUser = {
+                name: name,
+                email: email,
+                joinDate: '۱۴۰۳/۰۸/۱۵',
+                downloads: 0,
+                favorites: 0
+            };
+            
+            document.getElementById('loginBtn').textContent = currentUser.name;
+            document.getElementById('loginBtn').className = 'hidden md:block bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors';
+            
+            // Close modal
+            document.querySelector('.fixed').remove();
+            
+            showNotification('حساب کاربری با موفقیت ایجاد شد!', 'success');
+        }
+
+        function showUserProfile() {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center';
+            modal.innerHTML = `
+                <div class="bg-gray-900 p-8 rounded-lg max-w-md w-full mx-4 border border-red-500">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-bold text-white">پروفایل کاربری</h3>
+                        <button onclick="this.closest('.fixed').remove()" class="text-red-400 hover:text-red-300 text-2xl">✕</button>
+                    </div>
+                    <div class="space-y-4 mb-6">
+                        <div class="bg-gray-800 p-4 rounded-lg">
+                            <div class="flex items-center space-x-3 space-x-reverse mb-4">
+                                <div class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+                                    ${currentUser.name.charAt(0)}
+                                </div>
+                                <div>
+                                    <h4 class="text-white font-bold">${currentUser.name}</h4>
+                                    <p class="text-gray-400 text-sm">${currentUser.email}</p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 text-center">
+                                <div class="bg-gray-700 p-3 rounded-lg">
+                                    <div class="text-red-400 font-bold text-lg">${currentUser.downloads}</div>
+                                    <div class="text-gray-300 text-sm">دانلود</div>
+                                </div>
+                                <div class="bg-gray-700 p-3 rounded-lg">
+                                    <div class="text-red-400 font-bold text-lg">${currentUser.favorites}</div>
+                                    <div class="text-gray-300 text-sm">علاقه‌مندی</div>
+                                </div>
+                            </div>
+                            <div class="mt-4 text-center">
+                                <p class="text-gray-400 text-sm">عضو از: ${currentUser.joinDate}</p>
+                                <div class="mt-2">
+                                    ${isVipUser ? 
+                                        '<span class="bg-yellow-600 text-white px-3 py-1 rounded-full text-sm">کاربر VIP ⭐</span>' : 
+                                        '<span class="bg-gray-600 text-white px-3 py-1 rounded-full text-sm">کاربر عادی</span>'
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex gap-3">
+                        <button onclick="showEditProfile()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition-colors">
+                            ویرایش پروفایل
+                        </button>
+                        <button onclick="handleLogout()" class="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg transition-colors">
+                            خروج
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function handleLogout() {
+            isLoggedIn = false;
+            isVipUser = false;
+            currentUser = null;
+            
+            document.getElementById('loginBtn').textContent = 'ورود / ثبت نام';
+            document.getElementById('loginBtn').className = 'hidden md:block bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors';
+            
+            // Reset VIP button
+            document.getElementById('vipBtn').textContent = 'خرید اشتراک VIP';
+            document.getElementById('vipBtn').className = 'bg-white text-red-600 font-bold py-3 px-8 rounded-lg hover:bg-gray-100 transition-colors';
+            
+            // Close modal
+            document.querySelector('.fixed').remove();
+            
+            showNotification('با موفقیت خارج شدید', 'success');
+        }
+
+        function showEditProfile() {
+            // Close current modal
+            document.querySelector('.fixed').remove();
+            
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center';
+            modal.innerHTML = `
+                <div class="bg-gray-900 p-8 rounded-lg max-w-md w-full mx-4 border border-red-500">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-bold text-white">ویرایش پروفایل</h3>
+                        <button onclick="this.closest('.fixed').remove()" class="text-red-400 hover:text-red-300 text-2xl">✕</button>
+                    </div>
+                    <div class="space-y-4 mb-6">
+                        <div>
+                            <label for="editName" class="block text-white mb-2">نام و نام خانوادگی:</label>
+                            <input type="text" id="editName" value="${currentUser.name}" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-red-500">
+                        </div>
+                        <div>
+                            <label for="editEmail" class="block text-white mb-2">ایمیل:</label>
+                            <input type="email" id="editEmail" value="${currentUser.email}" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-red-500">
+                        </div>
+                        <div>
+                            <label for="newPassword" class="block text-white mb-2">رمز عبور جدید (اختیاری):</label>
+                            <input type="password" id="newPassword" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-red-500" placeholder="رمز عبور جدید">
+                        </div>
+                    </div>
+                    <div class="flex gap-3">
+                        <button onclick="saveProfile()" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg transition-colors">
+                            ذخیره تغییرات
+                        </button>
+                        <button onclick="this.closest('.fixed').remove()" class="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-lg transition-colors">
+                            انصراف
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function saveProfile() {
+            const newName = document.getElementById('editName').value;
+            const newEmail = document.getElementById('editEmail').value;
+            
+            if (!newName || !newEmail) {
+                showNotification('لطفاً نام و ایمیل را پر کنید', 'error');
+                return;
+            }
+            
+            currentUser.name = newName;
+            currentUser.email = newEmail;
+            
+            document.getElementById('loginBtn').textContent = currentUser.name;
+            
+            // Close modal
+            document.querySelector('.fixed').remove();
+            
+            showNotification('پروفایل با موفقیت بروزرسانی شد', 'success');
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            const bgColor = type === 'success' ? 'bg-green-600' : type === 'error' ? 'bg-red-600' : 'bg-blue-600';
+            notification.className = `fixed top-20 right-6 ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg z-50`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.remove(), 4000);
+        }
+
+        // VIP Button functionality
+        document.getElementById('vipBtn').addEventListener('click', function() {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center';
+            modal.innerHTML = `
+                <div class="bg-gray-900 p-8 rounded-lg max-w-md w-full mx-4 border border-red-500">
+                    <h3 class="text-xl font-bold text-white mb-4">🔥 اشتراک VIP</h3>
+                    <div class="space-y-4 mb-6">
+                        <div class="bg-red-600 p-4 rounded-lg">
+                            <h4 class="text-white font-bold">پلن ماهانه</h4>
+                            <p class="text-red-100">۵۰,۰۰۰ تومان</p>
+                        </div>
+                        <div class="bg-red-700 p-4 rounded-lg">
+                            <h4 class="text-white font-bold">پلن سالانه</h4>
+                            <p class="text-red-100">۴۰۰,۰۰۰ تومان</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-3">
+                        <button onclick="showPaymentInfo('monthly'); this.parentElement.parentElement.parentElement.remove()" class="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg">
+                            خرید ماهانه
+                        </button>
+                        <button onclick="showPaymentInfo('yearly'); this.parentElement.parentElement.parentElement.remove()" class="flex-1 bg-red-700 hover:bg-red-800 text-white py-2 px-4 rounded-lg">
+                            خرید سالانه
+                        </button>
+                        <button onclick="this.parentElement.parentElement.parentElement.remove()" class="w-full bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-lg mt-2">
+                            بستن
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        });
+
+        // Show payment information
+        function showPaymentInfo(plan) {
+            const prices = {
+                monthly: '۵۰,۰۰۰',
+                yearly: '۴۰۰,۰۰۰'
+            };
+            
+            const planText = plan === 'monthly' ? 'ماهانه' : 'سالانه';
+            const price = prices[plan];
+            
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center';
+            modal.innerHTML = `
+                <div class="bg-gray-900 p-8 rounded-lg max-w-md w-full mx-4 border border-red-500">
+                    <h3 class="text-xl font-bold text-white mb-4">💳 اطلاعات پرداخت</h3>
+                    <div class="bg-red-600 p-4 rounded-lg mb-4">
+                        <h4 class="text-white font-bold">پلن ${planText}</h4>
+                        <p class="text-red-100">مبلغ: ${price} تومان</p>
+                    </div>
+                    <div class="bg-gray-800 p-4 rounded-lg mb-4">
+                        <h5 class="text-white font-bold mb-2">شماره کارت:</h5>
+                        <p class="text-green-400 font-mono text-lg">۶۰۳۷-۹۹۱۲-۳۴۵۶-۷۸۹۰</p>
+                        <p class="text-gray-400 text-sm mt-2">به نام: سینما دانلود</p>
+                    </div>
+                    <div class="bg-gray-800 p-4 rounded-lg mb-6">
+                        <h5 class="text-white font-bold mb-2">پس از واریز:</h5>
+                        <p class="text-gray-300 text-sm mb-2">رسید پرداخت را به یکی از راه‌های زیر ارسال کنید:</p>
+                        <div class="space-y-2">
+                            <a href="https://t.me/rahmatedit" target="_blank" rel="noopener noreferrer" class="block bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded text-center transition-colors">
+                                📱 تلگرام: @rahmatedit
+                            </a>
+                            <a href="https://wa.me/989907002289" target="_blank" rel="noopener noreferrer" class="block bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded text-center transition-colors">
+                                📞 واتساپ: +989907002289
+                            </a>
+                        </div>
+                    </div>
+                    <button onclick="this.parentElement.parentElement.remove()" class="w-full bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-lg">
+                        بستن
+                    </button>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        // Activate VIP function
+        function activateVip() {
+            isVipUser = true;
+            document.getElementById('vipBtn').textContent = 'کاربر VIP ✓';
+            document.getElementById('vipBtn').className = 'bg-green-600 text-white font-bold py-3 px-8 rounded-lg cursor-default';
+            
+            // Show success message
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-20 right-6 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+            notification.textContent = 'اشتراک VIP با موفقیت فعال شد!';
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.remove(), 3000);
+        }
+
+        // Movie details functionality
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('movie-details')) {
+                const movieCard = e.target.closest('[data-movie]');
+                if (movieCard) {
+                    const movieData = JSON.parse(movieCard.dataset.movie);
+                    
+                    const modal = document.createElement('div');
+                    modal.className = 'fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center';
+                    modal.innerHTML = `
+                        <div class="bg-gray-900 p-8 rounded-lg max-w-lg w-full mx-4 border border-red-500 max-h-96 overflow-y-auto">
+                            <h3 class="text-2xl font-bold text-white mb-6">${movieData.name}</h3>
+                            <div class="space-y-3 text-white">
+                                <div class="flex">
+                                    <span class="text-red-400 font-bold w-24">نام:</span>
+                                    <span>${movieData.name}</span>
+                                </div>
+                                <div class="flex">
+                                    <span class="text-red-400 font-bold w-24">ژانر:</span>
+                                    <button class="text-blue-400 hover:text-blue-300 underline filter-btn" data-type="genre" data-value="${movieData.genre}">${movieData.genre}</button>
+                                </div>
+                                <div class="flex">
+                                    <span class="text-red-400 font-bold w-24">سال:</span>
+                                    <button class="text-blue-400 hover:text-blue-300 underline filter-btn" data-type="year" data-value="${movieData.year}">${movieData.year}</button>
+                                </div>
+                                <div class="flex">
+                                    <span class="text-red-400 font-bold w-24">کشور:</span>
+                                    <button class="text-blue-400 hover:text-blue-300 underline filter-btn" data-type="country" data-value="${movieData.country}">${movieData.country}</button>
+                                </div>
+                                <div class="flex">
+                                    <span class="text-red-400 font-bold w-24">ستارگان:</span>
+                                    <div class="flex flex-wrap gap-2">
+                                        ${movieData.stars.split('، ').map(star => 
+                                            `<button class="text-blue-400 hover:text-blue-300 underline filter-btn" data-type="star" data-value="${star.trim()}">${star.trim()}</button>`
+                                        ).join('، ')}
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <span class="text-red-400 font-bold w-24">کارگردان:</span>
+                                    <button class="text-blue-400 hover:text-blue-300 underline filter-btn" data-type="director" data-value="${movieData.director}">${movieData.director}</button>
+                                </div>
+                                <div class="flex">
+                                    <span class="text-red-400 font-bold w-24">دوبله:</span>
+                                    <span class="text-green-400">${movieData.dubbed}</span>
+                                </div>
+                                <div class="flex">
+                                    <span class="text-red-400 font-bold w-24">زیرنویس:</span>
+                                    <span class="text-green-400">${movieData.subtitle}</span>
+                                </div>
+                            </div>
+                            <button onclick="this.parentElement.parentElement.remove()" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg mt-6">
+                                بستن
+                            </button>
+                        </div>
+                    `;
+                    document.body.appendChild(modal);
+                }
+            }
+        });
+
+        // Filter functionality
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('filter-btn')) {
+                const filterType = e.target.dataset.type;
+                const filterValue = e.target.dataset.value;
+                
+                // Close the modal
+                e.target.closest('.fixed').remove();
+                
+                // Show filter notification
+                const notification = document.createElement('div');
+                notification.className = 'fixed top-20 right-6 bg-blue-600 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+                notification.textContent = `فیلتر شده بر اساس ${filterType === 'genre' ? 'ژانر' : filterType === 'year' ? 'سال' : filterType === 'country' ? 'کشور' : filterType === 'star' ? 'بازیگر' : 'کارگردان'}: ${filterValue}`;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => notification.remove(), 4000);
+                
+                // Scroll to movies section
+                document.getElementById('movies').scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+
+        // VIP Content Access
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('vip-content')) {
+                e.preventDefault();
+                if (!isVipUser) {
+                    const modal = document.createElement('div');
+                    modal.className = 'fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center';
+                    modal.innerHTML = `
+                        <div class="bg-gray-900 p-8 rounded-lg max-w-md w-full mx-4 border border-red-500">
+                            <h3 class="text-xl font-bold text-white mb-4">🔒 محتوای VIP</h3>
+                            <p class="text-gray-400 mb-6">برای دسترسی به این محتوا نیاز به اشتراک VIP دارید</p>
+                            <div class="flex gap-3">
+                                <button onclick="document.getElementById('vipBtn').click(); this.parentElement.parentElement.parentElement.remove()" class="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg">
+                                    خرید اشتراک
+                                </button>
+                                <button onclick="this.parentElement.parentElement.parentElement.remove()" class="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-lg">
+                                    بستن
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    document.body.appendChild(modal);
+                } else {
+                    // VIP user can access content
+                    const movieTitle = e.target.closest('.card-hover')?.querySelector('h4')?.textContent || 'محتوای VIP';
+                    
+                    const modal = document.createElement('div');
+                    modal.className = 'fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center';
+                    modal.innerHTML = `
+                        <div class="bg-gray-900 p-8 rounded-lg max-w-md w-full mx-4 border border-red-500">
+                            <h3 class="text-xl font-bold text-white mb-4">${movieTitle}</h3>
+                            <div class="space-y-3 mb-6">
+                                <button class="w-full bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg transition-colors">
+                                    کیفیت 4K - ۴.۵ گیگابایت
+                                </button>
+                                <button class="w-full bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg transition-colors">
+                                    کیفیت ۱۰۸۰p - ۲.۵ گیگابایت
+                                </button>
+                                <button class="w-full bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg transition-colors">
+                                    کیفیت ۷۲۰p - ۱.۲ گیگابایت
+                                </button>
+                            </div>
+                            <button onclick="this.parentElement.parentElement.remove()" class="w-full bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-lg transition-colors">
+                                بستن
+                            </button>
+                        </div>
+                    `;
+                    document.body.appendChild(modal);
+                }
+            }
+        });
+
+        // Touch slider functionality - all sliders are now touch scrollable
+        // Navigation buttons are hidden on mobile and only shown on larger screens
+        document.querySelectorAll('.slider-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const sliderName = this.dataset.slider;
+                const direction = this.dataset.direction;
+                const container = document.getElementById(sliderName + 'Container');
+                const cardWidth = 300; // Approximate card width including gap
+                
+                if (direction === 'next') {
+                    container.scrollBy({ left: cardWidth, behavior: 'smooth' });
+                } else {
+                    container.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Country filter functionality
+        document.querySelectorAll('.country-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const country = this.dataset.country;
+                
+                // Reset all buttons
+                document.querySelectorAll('.country-btn').forEach(b => {
+                    b.className = 'country-btn bg-gray-800 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors';
+                });
+                
+                // Highlight selected
+                this.className = 'country-btn bg-red-600 text-white px-4 py-2 rounded-lg';
+                
+                // Show notification
+                const notification = document.createElement('div');
+                notification.className = 'fixed top-20 right-6 bg-red-600 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+                notification.textContent = `فیلتر شده بر اساس: ${this.textContent}`;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => notification.remove(), 3000);
+            });
+        });
+
+        // Search functionality
+        document.querySelector('input[type="text"]').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const searchTerm = this.value;
+                if (searchTerm.trim()) {
+                    // Create search results overlay
+                    const overlay = document.createElement('div');
+                    overlay.className = 'fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center';
+                    overlay.innerHTML = `
+                        <div class="bg-gray-900 p-8 rounded-lg max-w-md w-full mx-4 border border-red-500">
+                            <h3 class="text-xl font-bold text-white mb-4">نتایج جستجو برای: "${searchTerm}"</h3>
+                            <p class="text-gray-400 mb-6">در حال جستجو در پایگاه داده...</p>
+                            <button onclick="this.parentElement.parentElement.remove()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg">
+                                بستن
+                            </button>
+                        </div>
+                    `;
+                    document.body.appendChild(overlay);
+                }
+            }
+        });
+
+        // Download button functionality
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('download-movie')) {
+                const movieTitle = e.target.closest('.movie-card')?.querySelector('h4')?.textContent || 'محتوا';
+                showDownloadModal(movieTitle, false);
+            }
+            
+            if (e.target.classList.contains('vip-content')) {
+                const movieTitle = e.target.closest('.movie-card')?.querySelector('h4')?.textContent || 'محتوا VIP';
+                showDownloadModal(movieTitle, true);
+            }
+        });
+
+        // Genre button functionality
+        document.querySelectorAll('button').forEach(button => {
+            const genres = ['اکشن', 'کمدی', 'درام', 'ترسناک', 'علمی تخیلی', 'عاشقانه'];
+            if (genres.includes(button.textContent.trim())) {
+                button.addEventListener('click', function() {
+                    const genre = this.textContent.trim();
+                    
+                    // Scroll to movies section and highlight
+                    document.getElementById('movies').scrollIntoView({ behavior: 'smooth' });
+                    
+                    // Show genre filter notification
+                    const notification = document.createElement('div');
+                    notification.className = 'fixed top-20 right-6 bg-red-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 transform translate-x-full transition-transform duration-300';
+                    notification.textContent = `فیلترشده بر اساس: ${genre}`;
+                    document.body.appendChild(notification);
+                    
+                    setTimeout(() => {
+                        notification.classList.remove('translate-x-full');
+                    }, 100);
+                    
+                    setTimeout(() => {
+                        notification.classList.add('translate-x-full');
+                        setTimeout(() => notification.remove(), 300);
+                    }, 3000);
+                });
+            }
+        });
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Footer page functionality
+        document.querySelectorAll('.footer-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const page = this.dataset.page;
+                showFooterPage(page);
+            });
+        });
+
+        function showFooterPage(page) {
+            const pages = {
+                about: {
+                    title: 'درباره ما',
+                    content: `
+                        <div class="space-y-4 text-gray-300">
+                            <p>سینما دانلود بزرگترین و معتبرترین مرجع دانلود فیلم و سریال در ایران است که از سال ۱۳۹۸ فعالیت خود را آغاز کرده است.</p>
+                            <p>ما با ارائه محتوای باکیفیت، لینک‌های مستقیم و سریع، دوبله و زیرنویس فارسی، تلاش می‌کنیم بهترین تجربه تماشا را برای شما فراهم کنیم.</p>
+                            <h4 class="text-white font-bold text-lg mt-6">ویژگی‌های ما:</h4>
+                            <ul class="list-disc list-inside space-y-2">
+                                <li>کیفیت‌های مختلف از ۴۸۰p تا ۴K</li>
+                                <li>دوبله و زیرنویس فارسی</li>
+                                <li>لینک‌های مستقیم و پرسرعت</li>
+                                <li>بروزرسانی روزانه محتوا</li>
+                                <li>پشتیبانی ۲۴ ساعته</li>
+                            </ul>
+                        </div>
+                    `
+                },
+                rules: {
+                    title: 'قوانین سایت',
+                    content: `
+                        <div class="space-y-4 text-gray-300">
+                            <h4 class="text-white font-bold text-lg">قوانین استفاده از سایت:</h4>
+                            <ol class="list-decimal list-inside space-y-3">
+                                <li>استفاده از محتوای سایت صرفاً برای مصارف شخصی مجاز است.</li>
+                                <li>کپی‌برداری و انتشار مجدد محتوا بدون اجازه ممنوع است.</li>
+                                <li>اشتراک‌گذاری اکانت VIP با دیگران ممنوع است.</li>
+                                <li>ارسال نظرات نامناسب و توهین‌آمیز ممنوع است.</li>
+                                <li>استفاده از ربات یا نرم‌افزار خودکار برای دانلود ممنوع است.</li>
+                            </ol>
+                            <h4 class="text-white font-bold text-lg mt-6">حقوق کاربران:</h4>
+                            <ul class="list-disc list-inside space-y-2">
+                                <li>دسترسی به محتوای رایگان</li>
+                                <li>پشتیبانی فنی</li>
+                                <li>امنیت اطلاعات شخصی</li>
+                                <li>کیفیت مطلوب سرویس</li>
+                            </ul>
+                        </div>
+                    `
+                },
+                contact: {
+                    title: 'تماس با ما',
+                    content: `
+                        <div class="space-y-6 text-gray-300">
+                            <div class="bg-gray-800 p-4 rounded-lg">
+                                <h4 class="text-white font-bold text-lg mb-3">راه‌های ارتباطی:</h4>
+                                <div class="space-y-3">
+                                    <div class="flex items-center space-x-3 space-x-reverse">
+                                        <span class="text-red-400">📧</span>
+                                        <span>ایمیل: Cinemadl.af@gmail.com</span>
+                                    </div>
+                                    <div class="flex items-center space-x-3 space-x-reverse">
+                                        <span class="text-red-400">📱</span>
+                                        <span>تلگرام: @Cinemadl_af</span>
+                                    </div>
+                                    <div class="flex items-center space-x-3 space-x-reverse">
+                                        <span class="text-red-400">📷</span>
+                                        <span>اینستاگرام: @Cinemadl.af</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-gray-800 p-4 rounded-lg">
+                                <h4 class="text-white font-bold text-lg mb-3">ساعات پاسخگویی:</h4>
+                                <p>شنبه تا پنج‌شنبه: ۹:۰۰ تا ۲۱:۰۰</p>
+                                <p>جمعه: ۱۴:۰۰ تا ۲۰:۰۰</p>
+                            </div>
+                            <div class="bg-gray-800 p-4 rounded-lg">
+                                <h4 class="text-white font-bold text-lg mb-3">موضوعات تماس:</h4>
+                                <ul class="list-disc list-inside space-y-1">
+                                    <li>مشکلات فنی</li>
+                                    <li>درخواست فیلم یا سریال</li>
+                                    <li>مشکلات پرداخت</li>
+                                    <li>گزارش لینک خراب</li>
+                                </ul>
+                            </div>
+                        </div>
+                    `
+                },
+                faq: {
+                    title: 'سوالات متداول',
+                    content: `
+                        <div class="space-y-4 text-gray-300">
+                            <div class="bg-gray-800 p-4 rounded-lg">
+                                <h4 class="text-white font-bold mb-2">چگونه فیلم دانلود کنم؟</h4>
+                                <p>روی فیلم مورد نظر کلیک کنید، سپس کیفیت دلخواه را انتخاب کرده و روی دکمه دانلود کلیک کنید.</p>
+                            </div>
+                            <div class="bg-gray-800 p-4 rounded-lg">
+                                <h4 class="text-white font-bold mb-2">اشتراک VIP چه مزایایی دارد؟</h4>
+                                <p>دسترسی به کیفیت ۴K، دانلود بدون محدودیت، محتوای اختصاصی و پشتیبانی اولویت‌دار.</p>
+                            </div>
+                            <div class="bg-gray-800 p-4 rounded-lg">
+                                <h4 class="text-white font-bold mb-2">چرا لینک دانلود کار نمی‌کند؟</h4>
+                                <p>ممکن است لینک موقتاً در دسترس نباشد. لطفاً چند دقیقه بعد تلاش کنید یا با پشتیبانی تماس بگیرید.</p>
+                            </div>
+                            <div class="bg-gray-800 p-4 rounded-lg">
+                                <h4 class="text-white font-bold mb-2">آیا می‌توانم درخواست فیلم بدهم؟</h4>
+                                <p>بله، از طریق تلگرام یا ایمیل می‌توانید درخواست فیلم یا سریال خود را ارسال کنید.</p>
+                            </div>
+                            <div class="bg-gray-800 p-4 rounded-lg">
+                                <h4 class="text-white font-bold mb-2">چگونه اشتراک VIP خریداری کنم؟</h4>
+                                <p>روی دکمه "خرید اشتراک VIP" کلیک کنید، پلن مورد نظر را انتخاب کرده و مراحل پرداخت را دنبال کنید.</p>
+                            </div>
+                        </div>
+                    `
+                }
+            };
+
+            const pageData = pages[page];
+            if (pageData) {
+                const modal = document.createElement('div');
+                modal.className = 'fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4';
+                modal.innerHTML = `
+                    <div class="bg-gray-900 rounded-lg max-w-4xl w-full max-h-96 overflow-y-auto border border-red-500">
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-6">
+                                <h3 class="text-2xl font-bold text-white">${pageData.title}</h3>
+                                <button onclick="this.closest('.fixed').remove()" class="text-red-400 hover:text-red-300 text-2xl">✕</button>
+                            </div>
+                            ${pageData.content}
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+            }
+        }
+
+        // New releases banner functionality
+        document.querySelectorAll('.new-release-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const movieName = this.dataset.movie;
+                showMoviePage(movieName);
+            });
+        });
+
+        function showMoviePage(movieName) {
+            const movieData = {
+                'دونکیرک ۲': {
+                    name: 'دونکیرک ۲',
+                    genre: 'جنگی',
+                    year: '۲۰۲۴',
+                    country: 'انگلستان',
+                    stars: 'تام هاردی، کیلیان مورفی',
+                    director: 'کریستوفر نولان',
+                    dubbed: 'دوبله فارسی',
+                    subtitle: 'زیرنویس فارسی',
+                    description: 'ادامه حماسه جنگ جهانی دوم با کیفیت بصری فوق‌العاده'
+                },
+                'بتمن جدید': {
+                    name: 'بتمن: شب تاریک',
+                    genre: 'اکشن',
+                    year: '۲۰۲۴',
+                    country: 'آمریکا',
+                    stars: 'رابرت پتینسون، زوئی کراویتز',
+                    director: 'مت ریوز',
+                    dubbed: 'دوبله فارسی',
+                    subtitle: 'زیرنویس فارسی',
+                    description: 'بازگشت شوالیه تاریکی با داستانی جدید و هیجان‌انگیز'
+                }
+            };
+
+            const movie = movieData[movieName] || {
+                name: movieName,
+                genre: 'اکشن',
+                year: '۲۰۲۴',
+                country: 'آمریکا',
+                stars: 'بازیگران مطرح',
+                director: 'کارگردان مشهور',
+                dubbed: 'دوبله فارسی',
+                subtitle: 'زیرنویس فارسی',
+                description: 'فیلمی جدید و هیجان‌انگیز'
+            };
+
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4';
+            modal.innerHTML = `
+                <div class="bg-gray-900 rounded-lg max-w-2xl w-full border border-red-500">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-2xl font-bold text-white">${movie.name}</h3>
+                            <button onclick="this.closest('.fixed').remove()" class="text-red-400 hover:text-red-300 text-2xl">✕</button>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-gradient-to-br from-red-600 to-red-800 rounded-lg h-64 flex items-center justify-center">
+                                <div class="text-6xl">🎬</div>
+                            </div>
+                            <div class="space-y-3 text-white">
+                                <div><span class="text-red-400 font-bold">ژانر:</span> ${movie.genre}</div>
+                                <div><span class="text-red-400 font-bold">سال:</span> ${movie.year}</div>
+                                <div><span class="text-red-400 font-bold">کشور:</span> ${movie.country}</div>
+                                <div><span class="text-red-400 font-bold">ستارگان:</span> ${movie.stars}</div>
+                                <div><span class="text-red-400 font-bold">کارگردان:</span> ${movie.director}</div>
+                                <div><span class="text-red-400 font-bold">دوبله:</span> <span class="text-green-400">${movie.dubbed}</span></div>
+                                <div><span class="text-red-400 font-bold">زیرنویس:</span> <span class="text-green-400">${movie.subtitle}</span></div>
+                            </div>
+                        </div>
+                        <div class="mt-6">
+                            <p class="text-gray-300 mb-4">${movie.description}</p>
+                            <div class="flex gap-3">
+                                <button class="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg transition-colors">
+                                    دانلود کیفیت ۱۰۸۰p
+                                </button>
+                                <button class="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg transition-colors">
+                                    دانلود کیفیت ۷۲۰p
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        // Mobile menu functionality
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const closeMobileMenu = document.getElementById('closeMobileMenu');
+        const mobileLoginBtn = document.getElementById('mobileLoginBtn');
+
+        mobileMenuBtn.addEventListener('click', function() {
+            mobileMenu.classList.add('active');
+        });
+
+        closeMobileMenu.addEventListener('click', function() {
+            mobileMenu.classList.remove('active');
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (mobileMenu.classList.contains('active') && 
+                !mobileMenu.contains(e.target) && 
+                !mobileMenuBtn.contains(e.target)) {
+                mobileMenu.classList.remove('active');
+            }
+        });
+
+        // Mobile login button
+        mobileLoginBtn.addEventListener('click', function() {
+            mobileMenu.classList.remove('active');
+            if (isLoggedIn) {
+                showUserProfile();
+            } else {
+                showLoginModal();
+            }
+        });
+
+        // Close mobile menu on navigation
+        document.querySelectorAll('#mobileMenu a').forEach(link => {
+            link.addEventListener('click', function() {
+                mobileMenu.classList.remove('active');
+            });
+        });
+
+        // Enhanced download functionality with quality options
+        function showDownloadModal(movieTitle, isVip = false) {
+            const qualityOptions = isVip ? [
+                { quality: '4K', size: '4.5 گیگابایت', type: 'vip', color: 'bg-purple-600 hover:bg-purple-700' },
+                { quality: '1080p', size: '2.5 گیگابایت', type: 'premium', color: 'bg-orange-600 hover:bg-orange-700' },
+                { quality: '720p', size: '1.2 گیگابایت', type: 'premium', color: 'bg-orange-600 hover:bg-orange-700' },
+                { quality: '480p', size: '600 مگابایت', type: 'free', color: 'bg-green-600 hover:bg-green-700' },
+                { quality: '360p', size: '350 مگابایت', type: 'free', color: 'bg-green-600 hover:bg-green-700' }
+            ] : [
+                { quality: '480p', size: '600 مگابایت', type: 'free', color: 'bg-green-600 hover:bg-green-700' },
+                { quality: '360p', size: '350 مگابایت', type: 'free', color: 'bg-green-600 hover:bg-green-700' }
+            ];
+
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4';
+            modal.innerHTML = `
+                <div class="bg-gray-900 rounded-lg max-w-md w-full border border-red-500">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-xl font-bold text-white">${movieTitle}</h3>
+                            <button onclick="this.closest('.fixed').remove()" class="text-red-400 hover:text-red-300 text-2xl">✕</button>
+                        </div>
+                        <div class="space-y-3 mb-6">
+                            ${qualityOptions.map(option => `
+                                <button onclick="handleDownload('${option.quality}', '${option.type}', '${movieTitle}')" 
+                                        class="w-full ${option.color} text-white py-3 px-4 rounded-lg transition-colors flex justify-between items-center">
+                                    <span class="font-bold">${option.quality}</span>
+                                    <span class="text-sm">${option.size}</span>
+                                    <span class="text-xs px-2 py-1 rounded ${option.type === 'free' ? 'bg-green-500' : option.type === 'premium' ? 'bg-orange-500' : 'bg-purple-500'}">
+                                        ${option.type === 'free' ? 'رایگان' : option.type === 'premium' ? 'اشتراکی' : 'VIP'}
+                                    </span>
+                                </button>
+                            `).join('')}
+                        </div>
+                        <button onclick="this.closest('.fixed').remove()" class="w-full bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-lg transition-colors">
+                            بستن
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function handleDownload(quality, type, movieTitle) {
+            // Close modal
+            document.querySelector('.fixed').remove();
+            
+            if (type === 'vip' && !isVipUser) {
+                showVipRequiredModal();
+                return;
+            }
+            
+            if (type === 'premium' && !isLoggedIn) {
+                showLoginRequiredModal();
+                return;
+            }
+            
+            // Simulate download process
+            showDownloadProgress(quality, movieTitle);
+        }
+
+        function showVipRequiredModal() {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4';
+            modal.innerHTML = `
+                <div class="bg-gray-900 rounded-lg max-w-md w-full border border-red-500">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-white mb-4">🔒 نیاز به اشتراک VIP</h3>
+                        <p class="text-gray-400 mb-6">برای دانلود کیفیت‌های بالا نیاز به اشتراک VIP دارید</p>
+                        <div class="flex gap-3">
+                            <button onclick="document.getElementById('vipBtn').click(); this.closest('.fixed').remove()" class="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg">
+                                خرید اشتراک VIP
+                            </button>
+                            <button onclick="this.closest('.fixed').remove()" class="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-lg">
+                                بستن
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function showLoginRequiredModal() {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4';
+            modal.innerHTML = `
+                <div class="bg-gray-900 rounded-lg max-w-md w-full border border-red-500">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-white mb-4">🔐 نیاز به ورود</h3>
+                        <p class="text-gray-400 mb-6">برای دانلود کیفیت‌های اشتراکی ابتدا وارد حساب کاربری خود شوید</p>
+                        <div class="flex gap-3">
+                            <button onclick="showLoginModal(); this.closest('.fixed').remove()" class="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg">
+                                ورود / ثبت نام
+                            </button>
+                            <button onclick="this.closest('.fixed').remove()" class="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-lg">
+                                بستن
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function showDownloadProgress(quality, movieTitle) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4';
+            modal.innerHTML = `
+                <div class="bg-gray-900 rounded-lg max-w-md w-full border border-red-500">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-white mb-4">در حال آماده‌سازی دانلود</h3>
+                        <p class="text-gray-400 mb-4">${movieTitle} - کیفیت ${quality}</p>
+                        <div class="bg-gray-700 rounded-full h-4 mb-4">
+                            <div id="progressBar" class="bg-red-600 h-4 rounded-full transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                        <p id="progressText" class="text-center text-gray-400">۰٪</p>
+                        <button onclick="this.closest('.fixed').remove()" class="w-full bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-lg mt-4">
+                            لغو
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            // Simulate progress
+            let progress = 0;
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        modal.remove();
+                        showNotification('دانلود با موفقیت آغاز شد!', 'success');
+                    }, 500);
+                }
+                progressBar.style.width = progress + '%';
+                progressText.textContent = Math.round(progress) + '٪';
+            }, 200);
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9927829210a31b54',t:'MTc2MTEyMDU0MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

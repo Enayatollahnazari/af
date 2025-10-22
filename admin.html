@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پنل مدیریت - سینما دانلود</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        
+        @import url('https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css');
+        
+        * {
+            font-family: 'Vazir', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d1b1b 50%, #1a1a1a 100%);
+        }
+        
+        .admin-card {
+            transition: all 0.3s ease;
+        }
+        
+        .admin-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(220, 38, 38, 0.2);
+        }
+        
+        .sidebar-item {
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-item:hover {
+            background: linear-gradient(90deg, rgba(220, 38, 38, 0.2), rgba(239, 68, 68, 0.1));
+            border-right: 4px solid #dc2626;
+        }
+        
+        .sidebar-item.active {
+            background: linear-gradient(90deg, rgba(220, 38, 38, 0.3), rgba(239, 68, 68, 0.2));
+            border-right: 4px solid #dc2626;
+        }
+        
+        .stats-card {
+            background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+        }
+        
+        .table-row:hover {
+            background-color: rgba(55, 65, 81, 0.5);
+        }
+        
+        .login-container {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%);
+        }
+        
+        .form-input {
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+            border-color: #dc2626;
+        }
+    </style>
+</head>
+<body class="h-full bg-black text-white">
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-container min-h-full flex items-center justify-center">
+        <div class="max-w-md w-full mx-4">
+            <div class="bg-gray-900 p-8 rounded-lg border border-red-500 shadow-2xl">
+                <div class="text-center mb-8">
+                    <div class="text-4xl mb-4">🔐</div>
+                    <h2 class="text-2xl font-bold text-white">پنل مدیریت</h2>
+                    <p class="text-gray-400 mt-2">سینما دانلود</p>
+                </div>
+                
+                <form id="adminLoginForm" class="space-y-6">
+                    <div>
+                        <label for="adminUsername" class="block text-white font-medium mb-2">نام کاربری:</label>
+                        <input type="text" id="adminUsername" class="form-input w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none" placeholder="Ownersite" required>
+                    </div>
+                    
+                    <div>
+                        <label for="adminPassword" class="block text-white font-medium mb-2">رمز عبور:</label>
+                        <input type="password" id="adminPassword" class="form-input w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none" placeholder="En12015@Ny" required>
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition-colors">
+                        ورود به پنل
+                    </button>
+                </form>
+                
+                <div class="mt-6 text-center">
+                    <a href="https://enayatollahnazari.github.io/af/" class="text-red-400 hover:text-red-300 text-sm">بازگشت به سایت اصلی</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="adminDashboard" class="hidden min-h-full">
+        <!-- Header -->
+        <header class="gradient-bg shadow-lg border-b border-red-500">
+            <div class="px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4 space-x-reverse">
+                        <div class="text-2xl">👑</div>
+                        <div>
+                            <h1 class="text-xl font-bold text-red-400">پنل مدیریت</h1>
+                            <p class="text-gray-400 text-sm">سینما دانلود</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4 space-x-reverse">
+                        <div class="text-sm text-gray-400">
+                            <span id="currentDateTime"></span>
+                        </div>
+                        <button id="logoutBtn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors">
+                            خروج
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="flex h-screen">
+            <!-- Sidebar -->
+            <aside class="w-64 bg-gray-900 border-l border-red-500">
+                <nav class="mt-6">
+                    <div class="px-4 space-y-2">
+                        <button class="sidebar-item active w-full text-right px-4 py-3 text-white rounded-lg" data-section="dashboard">
+                            📊 داشبورد
+                        </button>
+                        <button class="sidebar-item w-full text-right px-4 py-3 text-white rounded-lg" data-section="movies">
+                            🎬 مدیریت فیلم‌ها
+                        </button>
+                        <button class="sidebar-item w-full text-right px-4 py-3 text-white rounded-lg" data-section="series">
+                            📺 مدیریت سریال‌ها
+                        </button>
+                        <button class="sidebar-item w-full text-right px-4 py-3 text-white rounded-lg" data-section="users">
+                            👥 مدیریت کاربران
+                        </button>
+                        <button class="sidebar-item w-full text-right px-4 py-3 text-white rounded-lg" data-section="subscriptions">
+                            💎 مدیریت اشتراک‌ها
+                        </button>
+                        <button class="sidebar-item w-full text-right px-4 py-3 text-white rounded-lg" data-section="settings">
+                            ⚙️ تنظیمات سایت
+                        </button>
+                        <button class="sidebar-item w-full text-right px-4 py-3 text-white rounded-lg" data-section="analytics">
+                            📈 آمار و گزارشات
+                        </button>
+                    </div>
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="flex-1 overflow-y-auto bg-gray-800">
+                <!-- Dashboard Section -->
+                <div id="dashboardSection" class="section-content p-6">
+                    <h2 class="text-2xl font-bold text-white mb-6">داشبورد مدیریت</h2>
+                    
+                    <!-- Stats Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <div class="stats-card admin-card p-6 rounded-lg border border-gray-700">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-gray-400 text-sm">کل فیلم‌ها</p>
+                                    <p class="text-2xl font-bold text-white" id="totalMovies">1,247</p>
+                                </div>
+                                <div class="text-3xl">🎬</div>
+                            </div>
+                        </div>
+                        
+                        <div class="stats-card admin-card p-6 rounded-lg border border-gray-700">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-gray-400 text-sm">کل سریال‌ها</p>
+                                    <p class="text-2xl font-bold text-white" id="totalSeries">389</p>
+                                </div>
+                                <div class="text-3xl">📺</div>
+                            </div>
+                        </div>
+                        
+                        <div class="stats-card admin-card p-6 rounded-lg border border-gray-700">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-gray-400 text-sm">کل کاربران</p>
+                                    <p class="text-2xl font-bold text-white" id="totalUsers">12,456</p>
+                                </div>
+                                <div class="text-3xl">👥</div>
+                            </div>
+                        </div>
+                        
+                        <div class="stats-card admin-card p-6 rounded-lg border border-gray-700">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-gray-400 text-sm">اشتراک‌های فعال</p>
+                                    <p class="text-2xl font-bold text-white" id="activeSubscriptions">2,891</p>
+                                </div>
+                                <div class="text-3xl">💎</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="bg-gray-900 rounded-lg border border-gray-700 p-6">
+                        <h3 class="text-xl font-bold text-white mb-4">فعالیت‌های اخیر</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between p-3 bg-gray-800 rounded-lg">
+                                <div class="flex items-center space-x-3 space-x-reverse">
+                                    <div class="text-green-400">✅</div>
+                                    <span class="text-white">فیلم "اکشن جدید" اضافه شد</span>
+                                </div>
+                                <span class="text-gray-400 text-sm">۵ دقیقه پیش</span>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-gray-800 rounded-lg">
+                                <div class="flex items-center space-x-3 space-x-reverse">
+                                    <div class="text-blue-400">👤</div>
+                                    <span class="text-white">کاربر جدید ثبت نام کرد</span>
+                                </div>
+                                <span class="text-gray-400 text-sm">۱۰ دقیقه پیش</span>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-gray-800 rounded-lg">
+                                <div class="flex items-center space-x-3 space-x-reverse">
+                                    <div class="text-yellow-400">💎</div>
+                                    <span class="text-white">اشتراک VIP فعال شد</span>
+                                </div>
+                                <span class="text-gray-400 text-sm">۱۵ دقیقه پیش</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Movies Management Section -->
+                <div id="moviesSection" class="section-content hidden p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl font-bold text-white">مدیریت فیلم‌ها</h2>
+                        <button id="addMovieBtn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors">
+                            ➕ افزودن فیلم جدید
+                        </button>
+                    </div>
+
+                    <!-- Search and Filter -->
+                    <div class="bg-gray-900 rounded-lg border border-gray-700 p-4 mb-6">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <input type="text" id="movieSearch" placeholder="جستجوی فیلم..." class="bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-red-500">
+                            <select id="movieGenreFilter" class="bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-red-500">
+                                <option value="">همه ژانرها</option>
+                                <option value="اکشن">اکشن</option>
+                                <option value="کمدی">کمدی</option>
+                                <option value="درام">درام</option>
+                                <option value="ترسناک">ترسناک</option>
+                            </select>
+                            <select id="movieYearFilter" class="bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-red-500">
+                                <option value="">همه سال‌ها</option>
+                                <option value="2024">۲۰۲۴</option>
+                                <option value="2023">۲۰۲۳</option>
+                                <option value="2022">۲۰۲۲</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Movies Table -->
+                    <div class="bg-gray-900 rounded-lg border border-gray-700 overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead class="bg-gray-800">
+                                    <tr>
+                                        <th class="px-6 py-3 text-right text-white font-medium">نام فیلم</th>
+                                        <th class="px-6 py-3 text-right text-white font-medium">ژانر</th>
+                                        <th class="px-6 py-3 text-right text-white font-medium">سال</th>
+                                        <th class="px-6 py-3 text-right text-white font-medium">کشور</th>
+                                        <th class="px-6 py-3 text-right text-white font-medium">وضعیت</th>
+                                        <th class="px-6 py-3 text-right text-white font-medium">عملیات</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="moviesTableBody" class="divide-y divide-gray-700">
+                                    <!-- Movies will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Series Management Section -->
+                <div id="seriesSection" class="section-content hidden p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl font-bold text-white">مدیریت سریال‌ها</h2>
+                        <button id="addSeriesBtn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors">
+                            ➕ افزودن سریال جدید
+                        </button>
+                    </div>
+
+                    <!-- Series Table -->
+                    <div class="bg-gray-900 rounded-lg border border-gray-700 overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead class="bg-gray-800">
+                                    <tr>
+                                        <th class="px-6 py-3 text-right text-white font-medium">نام سریال</th>
+                                        <th class="px-6 py-3 text-right text-white font-medium">ژانر</th>
+                                        <th class="px-6 py-3 text-right text-white font-medium">فصل‌ها</th>
+                                        <th class="px-6 py-3 text-right text-white font-medium">قسمت‌ها</th>
+                                        <th class="px-6 py-3 text-right text-white font-medium">وضعیت</th>
+                                        <th class="px-6 py-3 text-right text-white font-medium">عملیات</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="seriesTableBody" class="divide-y divide-gray-700">
+                                    <!-- Series will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Users Management Section -->
+                <div id="usersSection" class="section-content hidden p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl font-bold text-white">مدیریت کاربران</h2>
+                        <div class="flex space-x-2 space-x-reverse">
+                            <button id="exportUsersBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
+                                📊 خروجی Excel
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Users Stats -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                        <div class="stats-card p-4 rounded-lg border border-gray-700">
+                            <div class="text-center">
+                                <p class="text-2xl font-bold text-white" id="freeUsers">9,565</p>
+                                <p class="text-gray-400">کاربران رایگان</p>
+                            </div>
+                        </div>
+                        <div class="stats-card p-4 rounded-lg border border-gray-700">
+                            <div class="text-center">
+                                <p class="text-2xl font-bold text-yellow-400" id="vipUsers">2,891</p>
+                                <p class="text-gray-400">کاربران VIP</p>
+                            </div>
+                        </div>
+                        <div class="stats-card p-4 rounded-lg border border-gray-700">
+                            <div class="text-center">
+                                <p class="text-2xl font-bold text-green-400" id="todayRegistrations">47</p>
+                                <p class="text-gray-400">ثبت نام امروز</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Users Table -->
+                    <div class="bg-gray-900 rounded-lg border border-gray-700 overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead class="bg-gray-800">
+                                    <tr>
+                                        <th class="px-6 py-3 text-right text-white font-medium">نام کاربری</th>
+                                        <th class="px-6 py-3 text-right text-white font-medium">ایمیل</th>
+                                        <th class="px-6 py-3 text-right text-white font-medium">تاریخ عضویت</th>
+                                        <th class="px-6 py-3 text-right text-white font-medium">نوع اشتراک</th>
+                                        <th class="px-6 py-3 text-right text-white font-medium">وضعیت</th>
+                                        <th class="px-6 py-3 text-right text-white font-medium">عملیات</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="usersTableBody" class="divide-y divide-gray-700">
+                                    <!-- Users will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Subscriptions Management Section -->
+                <div id="subscriptionsSection" class="section-content hidden p-6">
+                    <h2 class="text-2xl font-bold text-white mb-6">مدیریت اشتراک‌ها</h2>
+
+                    <!-- Subscription Plans -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div class="bg-gray-900 rounded-lg border border-gray-700 p-6">
+                            <h3 class="text-xl font-bold text-white mb-4">پلن ماهانه</h3>
+                            <div class="space-y-3">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">قیمت:</span>
+                                    <input type="text" id="monthlyPrice" value="50,000" class="bg-gray-800 border border-gray-700 rounded px-3 py-1 text-white w-24 text-left">
+                                    <span class="text-gray-400">تومان</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">مدت:</span>
+                                    <span class="text-white">۳۰ روز</span>
+                                </div>
+                                <button class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition-colors">
+                                    بروزرسانی قیمت
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-900 rounded-lg border border-gray-700 p-6">
+                            <h3 class="text-xl font-bold text-white mb-4">پلن سالانه</h3>
+                            <div class="space-y-3">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">قیمت:</span>
+                                    <input type="text" id="yearlyPrice" value="400,000" class="bg-gray-800 border border-gray-700 rounded px-3 py-1 text-white w-24 text-left">
+                                    <span class="text-gray-400">تومان</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">مدت:</span>
+                                    <span class="text-white">۳۶۵ روز</span>
+                                </div>
+                                <button class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition-colors">
+                                    بروزرسانی قیمت
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Active Subscriptions -->
+                    <div class="bg-gray-900 rounded-lg border border-gray-700 overflow-hidden">
+                        <div class="px-6 py-4 bg-gray-800">
+                            <h3 class="text-lg font-bold text-white">اشتراک‌های فعال</h3>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead class="bg-gray-800">
+                                    <tr>
+                                        <th class="px-6 py-3 text-right text-white font-medium">کاربر</th>
+                                        <th class="px-6 py-3 text-right text-white font-medium">نوع پلن</th>
+                                        <th class="px-6 py-3 text-right text-white font-medium">تاریخ شروع</th>
+                                        <th class="px-6 py-3 text-right text-white font-medium">تاریخ پایان</th>
+                                        <th class="px-6 py-3 text-right text-white font-medium">وضعیت</th>
+                                        <th class="px-6 py-3 text-right text-white font-medium">عملیات</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="subscriptionsTableBody" class="divide-y divide-gray-700">
+                                    <!-- Subscriptions will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Section -->
+                <div id="settingsSection" class="section-content hidden p-6">
+                    <h2 class="text-2xl font-bold text-white mb-6">تنظیمات سایت</h2>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Site Settings -->
+                        <div class="bg-gray-900 rounded-lg border border-gray-700 p-6">
+                            <h3 class="text-xl font-bold text-white mb-4">تنظیمات عمومی</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-white mb-2">نام سایت:</label>
+                                    <input type="text" value="سینما دانلود" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-red-500">
+                                </div>
+                                <div>
+                                    <label class="block text-white mb-2">توضیحات سایت:</label>
+                                    <textarea class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-red-500 h-20">بهترین مرجع دانلود فیلم و سریال</textarea>
+                                </div>
+                                <div>
+                                    <label class="block text-white mb-2">ایمیل تماس:</label>
+                                    <input type="email" value="Cinemadl.af@gmail.com" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-red-500">
+                                </div>
+                                <button class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg transition-colors">
+                                    ذخیره تغییرات
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Social Media Settings -->
+                        <div class="bg-gray-900 rounded-lg border border-gray-700 p-6">
+                            <h3 class="text-xl font-bold text-white mb-4">شبکه‌های اجتماعی</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-white mb-2">تلگرام:</label>
+                                    <input type="text" value="@Cinemadl_af" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-red-500">
+                                </div>
+                                <div>
+                                    <label class="block text-white mb-2">اینستاگرام:</label>
+                                    <input type="text" value="@Cinemadl.af" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-red-500">
+                                </div>
+                                <div>
+                                    <label class="block text-white mb-2">واتساپ:</label>
+                                    <input type="text" value="+989907002289" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-red-500">
+                                </div>
+                                <button class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg transition-colors">
+                                    ذخیره تغییرات
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analytics Section -->
+                <div id="analyticsSection" class="section-content hidden p-6">
+                    <h2 class="text-2xl font-bold text-white mb-6">آمار و گزارشات</h2>
+
+                    <!-- Analytics Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <div class="stats-card p-6 rounded-lg border border-gray-700">
+                            <div class="text-center">
+                                <p class="text-2xl font-bold text-blue-400">15,847</p>
+                                <p class="text-gray-400">بازدید امروز</p>
+                            </div>
+                        </div>
+                        <div class="stats-card p-6 rounded-lg border border-gray-700">
+                            <div class="text-center">
+                                <p class="text-2xl font-bold text-green-400">3,291</p>
+                                <p class="text-gray-400">دانلود امروز</p>
+                            </div>
+                        </div>
+                        <div class="stats-card p-6 rounded-lg border border-gray-700">
+                            <div class="text-center">
+                                <p class="text-2xl font-bold text-yellow-400">47</p>
+                                <p class="text-gray-400">عضو جدید امروز</p>
+                            </div>
+                        </div>
+                        <div class="stats-card p-6 rounded-lg border border-gray-700">
+                            <div class="text-center">
+                                <p class="text-2xl font-bold text-purple-400">12</p>
+                                <p class="text-gray-400">اشتراک جدید امروز</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Popular Content -->
+                    <div class="bg-gray-900 rounded-lg border border-gray-700 p-6">
+                        <h3 class="text-xl font-bold text-white mb-4">محبوب‌ترین محتوا</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between p-3 bg-gray-800 rounded-lg">
+                                <span class="text-white">فیلم اکشن جدید</span>
+                                <span class="text-green-400">2,847 دانلود</span>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-gray-800 rounded-lg">
+                                <span class="text-white">سریال جنایی</span>
+                                <span class="text-green-400">1,923 دانلود</span>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-gray-800 rounded-lg">
+                                <span class="text-white">درام عاشقانه</span>
+                                <span class="text-green-400">1,456 دانلود</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Add Movie Modal -->
+    <div id="addMovieModal" class="hidden fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4">
+        <div class="bg-gray-900 rounded-lg max-w-2xl w-full border border-red-500 max-h-96 overflow-y-auto">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xl font-bold text-white">افزودن فیلم جدید</h3>
+                    <button onclick="closeModal('addMovieModal')" class="text-red-400 hover:text-red-300 text-2xl">✕</button>
+                </div>
+                
+                <form id="addMovieForm" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-white mb-2">نام فیلم:</label>
+                            <input type="text" name="movieName" required class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-red-500">
+                        </div>
+                        <div>
+                            <label class="block text-white mb-2">ژانر:</label>
+                            <select name="movieGenre" required class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-red-500">
+                                <option value="">انتخاب ژانر</option>
+                                <option value="اکشن">اکشن</option>
+                                <option value="کمدی">کمدی</option>
+                                <option value="درام">درام</option>
+                                <option value="ترسناک">ترسناک</option>
+                                <option value="علمی تخیلی">علمی تخیلی</option>
+                                <option value="عاشقانه">عاشقانه</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-white mb-2">سال تولید:</label>
+                            <input type="number" name="movieYear" required class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-red-500">
+                        </div>
+                        <div>
+                            <label class="block text-white mb-2">کشور:</label>
+                            <input type="text" name="movieCountry" required class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-red-500">
+                        </div>
+                        <div>
+                            <label class="block text-white mb-2">کارگردان:</label>
+                            <input type="text" name="movieDirector" required class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-red-500">
+                        </div>
+                        <div>
+                            <label class="block text-white mb-2">امتیاز IMDB:</label>
+                            <input type="number" step="0.1" min="0" max="10" name="movieRating" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-red-500">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-white mb-2">بازیگران (با کاما جدا کنید):</label>
+                        <input type="text" name="movieStars" required class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-red-500">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-white mb-2">خلاصه داستان:</label>
+                        <textarea name="movieDescription" rows="3" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-red-500"></textarea>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-white mb-2">دوبله:</label>
+                            <select name="movieDubbed" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-red-500">
+                                <option value="دوبله فارسی">دوبله فارسی</option>
+                                <option value="زیرنویس فارسی">زیرنویس فارسی</option>
+                                <option value="دوبله و زیرنویس">دوبله و زیرنویس</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-white mb-2">نوع اشتراک:</label>
+                            <select name="movieType" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-red-500">
+                                <option value="free">رایگان</option>
+                                <option value="premium">اشتراکی</option>
+                                <option value="vip">VIP</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-3 pt-4">
+                        <button type="submit" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg transition-colors">
+                            افزودن فیلم
+                        </button>
+                        <button type="button" onclick="closeModal('addMovieModal')" class="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-lg transition-colors">
+                            انصراف
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Admin credentials
+        const ADMIN_CREDENTIALS = {
+            username: 'Ownersite',
+            password: 'En12015@Ny'
+        };
+
+        // Sample data
+        let movies = [
+            {
+                id: 1,
+                name: 'فیلم اکشن جدید',
+                genre: 'اکشن',
+                year: 2024,
+                country: 'آمریکا',
+                director: 'کریستوفر نولان',
+                stars: 'تام کروز، اسکارلت جوهانسون',
+                rating: 8.5,
+                dubbed: 'دوبله فارسی',
+                type: 'premium',
+                status: 'active',
+                downloads: 2847
+            },
+            {
+                id: 2,
+                name: 'کمدی خانوادگی',
+                genre: 'کمدی',
+                year: 2023,
+                country: 'آمریکا',
+                director: 'آدام مک کی',
+                stars: 'ویل فرل، امی پولر',
+                rating: 7.9,
+                dubbed: 'دوبله فارسی',
+                type: 'free',
+                status: 'active',
+                downloads: 1456
+            }
+        ];
+
+        let series = [
+            {
+                id: 1,
+                name: 'سریال جنایی',
+                genre: 'جنایی',
+                seasons: 3,
+                episodes: 24,
+                year: 2024,
+                status: 'active',
+                downloads: 1923
+            }
+        ];
+
+        let users = [
+            {
+                id: 1,
+                username: 'علی_احمدی',
+                email: 'ali@example.com',
+                joinDate: '۱۴۰۳/۰۸/۱۰',
+                subscriptionType: 'vip',
+                status: 'active',
+                subscriptionEnd: '۱۴۰۳/۱۲/۱۰'
+            },
+            {
+                id: 2,
+                username: 'مریم_محمدی',
+                email: 'maryam@example.com',
+                joinDate: '۱۴۰۳/۰۸/۱۲',
+                subscriptionType: 'free',
+                status: 'active',
+                subscriptionEnd: null
+            }
+        ];
+
+        let subscriptions = [
+            {
+                id: 1,
+                userId: 1,
+                username: 'علی_احمدی',
+                planType: 'سالانه',
+                startDate: '۱۴۰۲/۱۲/۱۰',
+                endDate: '۱۴۰۳/۱۲/۱۰',
+                status: 'active',
+                amount: '400,000'
+            }
+        ];
+
+        // Check URL for /owner path
+        if (window.location.pathname.endsWith('/owner') || window.location.pathname.includes('/owner') || window.location.href.includes('owner')) {
+            // Show login screen
+            document.getElementById('loginScreen').classList.remove('hidden');
+        } else {
+            // Redirect to main site if not accessing admin panel
+            window.location.href = 'https://enayatollahnazari.github.io/af/';
+        }
+
+        // Login functionality
+        document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('adminUsername').value;
+            const password = document.getElementById('adminPassword').value;
+            
+            if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('adminDashboard').classList.remove('hidden');
+                initializeDashboard();
+            } else {
+                showNotification('نام کاربری یا رمز عبور اشتباه است', 'error');
+            }
+        });
+
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            document.getElementById('adminDashboard').classList.add('hidden');
+            document.getElementById('loginScreen').classList.remove('hidden');
+            document.getElementById('adminUsername').value = '';
+            document.getElementById('adminPassword').value = '';
+        });
+
+        // Initialize dashboard
+        function initializeDashboard() {
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+            loadMoviesTable();
+            loadSeriesTable();
+            loadUsersTable();
+            loadSubscriptionsTable();
+        }
+
+        // Update date and time
+        function updateDateTime() {
+            const now = new Date();
+            const options = {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            };
+            document.getElementById('currentDateTime').textContent = now.toLocaleDateString('fa-IR', options);
+        }
+
+        // Sidebar navigation
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // Remove active class from all items
+                document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+                // Add active class to clicked item
+                this.classList.add('active');
+                
+                // Hide all sections
+                document.querySelectorAll('.section-content').forEach(section => {
+                    section.classList.add('hidden');
+                });
+                
+                // Show selected section
+                const sectionName = this.dataset.section;
+                document.getElementById(sectionName + 'Section').classList.remove('hidden');
+            });
+        });
+
+        // Load movies table
+        function loadMoviesTable() {
+            const tbody = document.getElementById('moviesTableBody');
+            tbody.innerHTML = '';
+            
+            movies.forEach(movie => {
+                const row = document.createElement('tr');
+                row.className = 'table-row';
+                row.innerHTML = `
+                    <td class="px-6 py-4 text-white">${movie.name}</td>
+                    <td class="px-6 py-4 text-gray-400">${movie.genre}</td>
+                    <td class="px-6 py-4 text-gray-400">${movie.year}</td>
+                    <td class="px-6 py-4 text-gray-400">${movie.country}</td>
+                    <td class="px-6 py-4">
+                        <span class="px-2 py-1 rounded text-xs ${movie.status === 'active' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'}">
+                            ${movie.status === 'active' ? 'فعال' : 'غیرفعال'}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex space-x-2 space-x-reverse">
+                            <button onclick="editMovie(${movie.id})" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs transition-colors">
+                                ویرایش
+                            </button>
+                            <button onclick="deleteMovie(${movie.id})" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs transition-colors">
+                                حذف
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Load series table
+        function loadSeriesTable() {
+            const tbody = document.getElementById('seriesTableBody');
+            tbody.innerHTML = '';
+            
+            series.forEach(s => {
+                const row = document.createElement('tr');
+                row.className = 'table-row';
+                row.innerHTML = `
+                    <td class="px-6 py-4 text-white">${s.name}</td>
+                    <td class="px-6 py-4 text-gray-400">${s.genre}</td>
+                    <td class="px-6 py-4 text-gray-400">${s.seasons}</td>
+                    <td class="px-6 py-4 text-gray-400">${s.episodes}</td>
+                    <td class="px-6 py-4">
+                        <span class="px-2 py-1 rounded text-xs ${s.status === 'active' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'}">
+                            ${s.status === 'active' ? 'فعال' : 'غیرفعال'}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex space-x-2 space-x-reverse">
+                            <button onclick="editSeries(${s.id})" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs transition-colors">
+                                ویرایش
+                            </button>
+                            <button onclick="deleteSeries(${s.id})" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs transition-colors">
+                                حذف
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Load users table
+        function loadUsersTable() {
+            const tbody = document.getElementById('usersTableBody');
+            tbody.innerHTML = '';
+            
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                row.className = 'table-row';
+                row.innerHTML = `
+                    <td class="px-6 py-4 text-white">${user.username}</td>
+                    <td class="px-6 py-4 text-gray-400">${user.email}</td>
+                    <td class="px-6 py-4 text-gray-400">${user.joinDate}</td>
+                    <td class="px-6 py-4">
+                        <span class="px-2 py-1 rounded text-xs ${user.subscriptionType === 'vip' ? 'bg-yellow-600 text-white' : user.subscriptionType === 'premium' ? 'bg-blue-600 text-white' : 'bg-gray-600 text-white'}">
+                            ${user.subscriptionType === 'vip' ? 'VIP' : user.subscriptionType === 'premium' ? 'اشتراکی' : 'رایگان'}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="px-2 py-1 rounded text-xs ${user.status === 'active' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'}">
+                            ${user.status === 'active' ? 'فعال' : 'غیرفعال'}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex space-x-2 space-x-reverse">
+                            <button onclick="manageUserSubscription(${user.id})" class="bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-1 rounded text-xs transition-colors">
+                                اشتراک
+                            </button>
+                            <button onclick="editUser(${user.id})" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs transition-colors">
+                                ویرایش
+                            </button>
+                            <button onclick="deleteUser(${user.id})" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs transition-colors">
+                                حذف
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Load subscriptions table
+        function loadSubscriptionsTable() {
+            const tbody = document.getElementById('subscriptionsTableBody');
+            tbody.innerHTML = '';
+            
+            subscriptions.forEach(sub => {
+                const row = document.createElement('tr');
+                row.className = 'table-row';
+                row.innerHTML = `
+                    <td class="px-6 py-4 text-white">${sub.username}</td>
+                    <td class="px-6 py-4 text-gray-400">${sub.planType}</td>
+                    <td class="px-6 py-4 text-gray-400">${sub.startDate}</td>
+                    <td class="px-6 py-4 text-gray-400">${sub.endDate}</td>
+                    <td class="px-6 py-4">
+                        <span class="px-2 py-1 rounded text-xs ${sub.status === 'active' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'}">
+                            ${sub.status === 'active' ? 'فعال' : 'منقضی'}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex space-x-2 space-x-reverse">
+                            <button onclick="extendSubscription(${sub.id})" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs transition-colors">
+                                تمدید
+                            </button>
+                            <button onclick="cancelSubscription(${sub.id})" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs transition-colors">
+                                لغو
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Add movie functionality
+        document.getElementById('addMovieBtn').addEventListener('click', function() {
+            document.getElementById('addMovieModal').classList.remove('hidden');
+        });
+
+        document.getElementById('addMovieForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const movieData = {
+                id: movies.length + 1,
+                name: formData.get('movieName'),
+                genre: formData.get('movieGenre'),
+                year: parseInt(formData.get('movieYear')),
+                country: formData.get('movieCountry'),
+                director: formData.get('movieDirector'),
+                stars: formData.get('movieStars'),
+                rating: parseFloat(formData.get('movieRating')) || 0,
+                dubbed: formData.get('movieDubbed'),
+                type: formData.get('movieType'),
+                status: 'active',
+                downloads: 0
+            };
+            
+            movies.push(movieData);
+            loadMoviesTable();
+            closeModal('addMovieModal');
+            showNotification('فیلم با موفقیت اضافه شد', 'success');
+            
+            // Reset form
+            e.target.reset();
+        });
+
+        // User subscription management
+        function manageUserSubscription(userId) {
+            const user = users.find(u => u.id === userId);
+            if (!user) return;
+            
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4';
+            modal.innerHTML = `
+                <div class="bg-gray-900 rounded-lg max-w-md w-full border border-red-500">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-xl font-bold text-white">مدیریت اشتراک</h3>
+                            <button onclick="this.closest('.fixed').remove()" class="text-red-400 hover:text-red-300 text-2xl">✕</button>
+                        </div>
+                        
+                        <div class="space-y-4 mb-6">
+                            <div class="bg-gray-800 p-4 rounded-lg">
+                                <h4 class="text-white font-bold mb-2">کاربر: ${user.username}</h4>
+                                <p class="text-gray-400">وضعیت فعلی: ${user.subscriptionType === 'vip' ? 'VIP' : user.subscriptionType === 'premium' ? 'اشتراکی' : 'رایگان'}</p>
+                                ${user.subscriptionEnd ? `<p class="text-gray-400">پایان اشتراک: ${user.subscriptionEnd}</p>` : ''}
+                            </div>
+                            
+                            <div class="space-y-3">
+                                <button onclick="updateUserSubscription(${userId}, 'vip'); this.closest('.fixed').remove()" class="w-full bg-yellow-600 hover:bg-yellow-700 text-white py-2 px-4 rounded-lg transition-colors">
+                                    فعال‌سازی VIP
+                                </button>
+                                <button onclick="updateUserSubscription(${userId}, 'premium'); this.closest('.fixed').remove()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition-colors">
+                                    فعال‌سازی اشتراک عادی
+                                </button>
+                                <button onclick="updateUserSubscription(${userId}, 'free'); this.closest('.fixed').remove()" class="w-full bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-lg transition-colors">
+                                    تبدیل به رایگان
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <button onclick="this.closest('.fixed').remove()" class="w-full bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-lg transition-colors">
+                            بستن
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        // Update user subscription
+        function updateUserSubscription(userId, newType) {
+            const user = users.find(u => u.id === userId);
+            if (!user) return;
+            
+            user.subscriptionType = newType;
+            
+            if (newType === 'vip') {
+                const endDate = new Date();
+                endDate.setFullYear(endDate.getFullYear() + 1);
+                user.subscriptionEnd = endDate.toLocaleDateString('fa-IR');
+            } else if (newType === 'premium') {
+                const endDate = new Date();
+                endDate.setMonth(endDate.getMonth() + 1);
+                user.subscriptionEnd = endDate.toLocaleDateString('fa-IR');
+            } else {
+                user.subscriptionEnd = null;
+            }
+            
+            loadUsersTable();
+            showNotification(`اشتراک کاربر ${user.username} بروزرسانی شد`, 'success');
+        }
+
+        // Delete functions
+        function deleteMovie(id) {
+            if (confirm('آیا از حذف این فیلم اطمینان دارید؟')) {
+                movies = movies.filter(m => m.id !== id);
+                loadMoviesTable();
+                showNotification('فیلم حذف شد', 'success');
+            }
+        }
+
+        function deleteSeries(id) {
+            if (confirm('آیا از حذف این سریال اطمینان دارید؟')) {
+                series = series.filter(s => s.id !== id);
+                loadSeriesTable();
+                showNotification('سریال حذف شد', 'success');
+            }
+        }
+
+        function deleteUser(id) {
+            if (confirm('آیا از حذف این کاربر اطمینان دارید؟')) {
+                users = users.filter(u => u.id !== id);
+                loadUsersTable();
+                showNotification('کاربر حذف شد', 'success');
+            }
+        }
+
+        // Edit functions (simplified)
+        function editMovie(id) {
+            showNotification('ویرایش فیلم در نسخه بعدی اضافه خواهد شد', 'info');
+        }
+
+        function editSeries(id) {
+            showNotification('ویرایش سریال در نسخه بعدی اضافه خواهد شد', 'info');
+        }
+
+        function editUser(id) {
+            showNotification('ویرایش کاربر در نسخه بعدی اضافه خواهد شد', 'info');
+        }
+
+        // Subscription management
+        function extendSubscription(id) {
+            showNotification('تمدید اشتراک با موفقیت انجام شد', 'success');
+        }
+
+        function cancelSubscription(id) {
+            if (confirm('آیا از لغو این اشتراک اطمینان دارید؟')) {
+                showNotification('اشتراک لغو شد', 'success');
+            }
+        }
+
+        // Utility functions
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            const bgColor = type === 'success' ? 'bg-green-600' : type === 'error' ? 'bg-red-600' : 'bg-blue-600';
+            notification.className = `fixed top-20 right-6 ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg z-50`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.remove(), 4000);
+        }
+
+        // Search functionality
+        document.getElementById('movieSearch')?.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const filteredMovies = movies.filter(movie => 
+                movie.name.toLowerCase().includes(searchTerm) ||
+                movie.genre.toLowerCase().includes(searchTerm) ||
+                movie.director.toLowerCase().includes(searchTerm)
+            );
+            // Update table with filtered results
+            loadMoviesTableWithData(filteredMovies);
+        });
+
+        function loadMoviesTableWithData(data) {
+            const tbody = document.getElementById('moviesTableBody');
+            tbody.innerHTML = '';
+            
+            data.forEach(movie => {
+                const row = document.createElement('tr');
+                row.className = 'table-row';
+                row.innerHTML = `
+                    <td class="px-6 py-4 text-white">${movie.name}</td>
+                    <td class="px-6 py-4 text-gray-400">${movie.genre}</td>
+                    <td class="px-6 py-4 text-gray-400">${movie.year}</td>
+                    <td class="px-6 py-4 text-gray-400">${movie.country}</td>
+                    <td class="px-6 py-4">
+                        <span class="px-2 py-1 rounded text-xs ${movie.status === 'active' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'}">
+                            ${movie.status === 'active' ? 'فعال' : 'غیرفعال'}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex space-x-2 space-x-reverse">
+                            <button onclick="editMovie(${movie.id})" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs transition-colors">
+                                ویرایش
+                            </button>
+                            <button onclick="deleteMovie(${movie.id})" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs transition-colors">
+                                حذف
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9927981154657747',t:'MTc2MTEyMTQyMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
